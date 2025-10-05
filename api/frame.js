@@ -1,4 +1,4 @@
-// Farcaster Frame API endpoint
+// Farcaster Frame API endpoint for Vercel
 // This file handles the frame interactions for the DinoRun game
 
 export default function handler(req, res) {
@@ -19,82 +19,45 @@ export default function handler(req, res) {
         case 1: // Play DinoRun button
             return res.status(200).json({
                 type: 'frame',
-                image: `${process.env.BASE_URL}/dino-game-preview.png`,
+                image: `${process.env.VERCEL_URL ? 'https://' + process.env.VERCEL_URL : 'https://your-domain.vercel.app'}/dino-game-preview.png`,
                 buttons: [
                     {
                         label: '🎮 Play Now',
                         action: 'link',
-                        target: `${process.env.BASE_URL}/index.html`
+                        target: `${process.env.VERCEL_URL ? 'https://' + process.env.VERCEL_URL : 'https://your-domain.vercel.app'}/index.html`
                     },
                     {
                         label: '📊 Leaderboard',
                         action: 'post'
                     }
                 ],
-                postUrl: `${process.env.BASE_URL}/api/frame`
+                postUrl: `${process.env.VERCEL_URL ? 'https://' + process.env.VERCEL_URL : 'https://your-domain.vercel.app'}/api/frame`
             });
             
         case 2: // Leaderboard button
             return res.status(200).json({
                 type: 'frame',
-                image: `${process.env.BASE_URL}/leaderboard-preview.png`,
+                image: `${process.env.VERCEL_URL ? 'https://' + process.env.VERCEL_URL : 'https://your-domain.vercel.app'}/leaderboard-preview.png`,
                 buttons: [
                     {
                         label: '🔄 Back to Game',
                         action: 'post'
                     }
                 ],
-                postUrl: `${process.env.BASE_URL}/api/frame`
+                postUrl: `${process.env.VERCEL_URL ? 'https://' + process.env.VERCEL_URL : 'https://your-domain.vercel.app'}/api/frame`
             });
             
         default:
             return res.status(200).json({
                 type: 'frame',
-                image: `${process.env.BASE_URL}/dino-preview.png`,
+                image: `${process.env.VERCEL_URL ? 'https://' + process.env.VERCEL_URL : 'https://your-domain.vercel.app'}/dino-preview.png`,
                 buttons: [
                     {
                         label: 'Play DinoRun',
                         action: 'post'
                     }
                 ],
-                postUrl: `${process.env.BASE_URL}/api/frame`
+                postUrl: `${process.env.VERCEL_URL ? 'https://' + process.env.VERCEL_URL : 'https://your-domain.vercel.app'}/api/frame`
             });
     }
-}
-
-// Alternative Express.js implementation
-export function expressHandler(req, res) {
-    const { untrustedData } = req.body;
-    
-    if (!untrustrustedData) {
-        return res.status(400).json({ error: 'Invalid frame data' });
-    }
-
-    const { buttonIndex, fid } = untrustedData;
-    
-    // Store user interaction (optional)
-    if (fid) {
-        // You could store user interactions in a database here
-        console.log(`User ${fid} interacted with button ${buttonIndex}`);
-    }
-    
-    // Return frame response
-    const response = {
-        type: 'frame',
-        image: `${process.env.BASE_URL || 'https://your-domain.com'}/dino-game-preview.png`,
-        buttons: [
-            {
-                label: '🎮 Play DinoRun',
-                action: 'link',
-                target: `${process.env.BASE_URL || 'https://your-domain.com'}/index.html`
-            },
-            {
-                label: '🔄 Share Score',
-                action: 'post'
-            }
-        ],
-        postUrl: `${process.env.BASE_URL || 'https://your-domain.com'}/api/frame`
-    };
-    
-    res.status(200).json(response);
 }
