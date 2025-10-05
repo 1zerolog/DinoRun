@@ -1,0 +1,38 @@
+{
+  "name": "dinorun-farcaster-mini-app",
+  "version": "1.0.0",
+  "description": "A DinoRun game built as a Farcaster mini app with frame integration",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve . -l 3000",
+    "build": "echo 'No build step required for static files'",
+    "deploy": "echo 'Deploy to your preferred hosting service'"
+  },
+  "keywords": [
+    "farcaster",
+    "mini-app",
+    "game",
+    "dino",
+    "runner",
+    "web3",
+    "frame"
+  ],
+  "author": "DinoRun Developer",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/dinorun-farcaster-mini-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/dinorun-farcaster-mini-app/issues"
+  },
+  "homepage": "https://github.com/your-username/dinorun-farcaster-mini-app#readme"
+}
