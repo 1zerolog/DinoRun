@@ -1,5 +1,5 @@
 class DinoRunPro {
-  constructor() {
+    constructor() {
     this.canvas = document.getElementById("gameCanvas");
     this.ctx = this.canvas.getContext("2d");
     this.scoreElement = document.getElementById("score");
@@ -11,8 +11,8 @@ class DinoRunPro {
     this.nitroBtn = document.getElementById("nitroBtn");
     this.shareBtn = document.getElementById("shareBtn");
 
-    this.gameRunning = false;
-    this.score = 0;
+        this.gameRunning = false;
+        this.score = 0;
     this.highScore = localStorage.getItem("dinoRunProHighScore") || 0;
     this.gameSpeed = 8;
     this.baseGameSpeed = 8;
@@ -35,37 +35,42 @@ class DinoRunPro {
     this.level = 1;
     this.levelUpScore = 1000;
 
-    this.dino = {
+        this.dino = {
       x: 80,
-      y: this.canvas.height - 120,
+      y: 0, // Will be set properly in init
       width: 50,
       height: 60,
-      velocityY: 0,
-      isJumping: false,
-      groundY: this.canvas.height - 120,
+            velocityY: 0,
+            isJumping: false,
+      groundY: 0, // Will be set properly in init
       jumpCount: 0,
       maxJumps: 1
-    };
-
-    this.obstacles = [];
+        };
+        
+        this.obstacles = [];
     this.powerUps = [];
     this.particles = [];
     this.nitroParticles = [];
-    this.obstacleTimer = 0;
+        this.obstacleTimer = 0;
     this.obstacleInterval = 80;
     this.powerUpTimer = 0;
     this.powerUpInterval = 300;
-
+        
     this.groundY = this.canvas.height - 60;
     this.backgroundOffset = 0;
-
-    this.init();
-  }
-
+        
+        this.init();
+    }
+    
   init() {
     this.highScoreElement.textContent = this.highScore;
     this.setupEventListeners();
     this.resizeCanvas();
+    
+    // Initialize dino position after canvas is resized
+    this.dino.groundY = this.canvas.height - 120;
+    this.dino.y = this.dino.groundY;
+    
     this.gameLoop();
   }
 
@@ -81,15 +86,19 @@ class DinoRunPro {
     this.dino.groundY = this.canvas.height - 120;
     this.dino.y = this.dino.groundY;
 
-    window.addEventListener("resize", () => this.resizeCanvas());
+    // Only add resize listener once
+    if (!this.resizeListenerAdded) {
+      window.addEventListener("resize", () => this.resizeCanvas());
+      this.resizeListenerAdded = true;
+    }
   }
-
-  setupEventListeners() {
+    
+    setupEventListeners() {
     document.addEventListener("keydown", (e) => {
       if (e.code === "Space" || e.code === "ArrowUp") {
-        e.preventDefault();
-        this.jump();
-      }
+                e.preventDefault();
+                this.jump();
+            }
       if (e.code === "ShiftLeft" || e.code === "ArrowRight") {
         e.preventDefault();
         this.activateNitro();
@@ -108,10 +117,10 @@ class DinoRunPro {
     this.restartBtn.addEventListener("click", () => this.restart());
 
     this.canvas.addEventListener("touchstart", (e) => {
-      e.preventDefault();
-      this.jump();
-    });
-
+            e.preventDefault();
+            this.jump();
+        });
+        
     this.canvas.addEventListener("touchmove", (e) => {
       e.preventDefault();
       const touch = e.touches[0];
@@ -132,19 +141,19 @@ class DinoRunPro {
     });
 
     this.canvas.addEventListener("click", (e) => {
-      this.jump();
-    });
-  }
-
-  jump() {
-    if (!this.gameRunning) {
-      this.startGame();
-      return;
+            this.jump();
+        });
     }
-
+    
+    jump() {
+        if (!this.gameRunning) {
+            this.startGame();
+            return;
+        }
+        
     if (this.dino.jumpCount < this.dino.maxJumps) {
-      this.dino.velocityY = this.jumpPower;
-      this.dino.isJumping = true;
+            this.dino.velocityY = this.jumpPower;
+            this.dino.isJumping = true;
       this.dino.jumpCount++;
       this.createJumpParticles();
     }
@@ -192,9 +201,9 @@ class DinoRunPro {
         size: Math.random() * 6 + 4,
         color: `hsl(${Math.random() * 30 + 15}, 90%, 60%)`
       });
+        }
     }
-  }
-
+    
   startGame() {
     this.gameRunning = true;
     this.score = 0;
@@ -213,35 +222,41 @@ class DinoRunPro {
     this.nitroParticles = [];
     this.obstacleTimer = 0;
     this.powerUpTimer = 0;
+    
+    // Reset dino position
+    this.dino.groundY = this.canvas.height - 120;
     this.dino.y = this.dino.groundY;
     this.dino.velocityY = 0;
     this.dino.isJumping = false;
     this.dino.jumpCount = 0;
     this.dino.maxJumps = 1;
+    
     this.gameOverElement.style.display = "none";
     this.updateScore();
     this.updatePowerUpUI();
+    
+    console.log('Game started! Dino position:', this.dino.x, this.dino.y);
   }
-
-  restart() {
-    this.startGame();
-  }
-
-  update() {
-    if (!this.gameRunning) return;
-
-    this.updateDino();
-    this.updateObstacles();
+    
+    restart() {
+        this.startGame();
+    }
+    
+    update() {
+        if (!this.gameRunning) return;
+        
+        this.updateDino();
+        this.updateObstacles();
     this.updatePowerUps();
     this.updateParticles();
     this.updateNitroParticles();
     this.updatePowerUpsStatus();
-    this.checkCollisions();
+        this.checkCollisions();
     this.checkPowerUpCollisions();
-
+        
     this.score += this.nitroActive ? 6 : 3;
-    this.updateScore();
-
+        this.updateScore();
+        
     if (this.score % this.levelUpScore === 0) {
       this.levelUp();
     }
@@ -254,40 +269,40 @@ class DinoRunPro {
     } else if (!this.nitroActive && this.nitroFuel < this.maxNitroFuel) {
       this.nitroFuel += 0.2;
     }
-  }
-
-  updateDino() {
-    this.dino.velocityY += this.gravity;
-    this.dino.y += this.dino.velocityY;
-
-    if (this.dino.y >= this.dino.groundY) {
-      this.dino.y = this.dino.groundY;
-      this.dino.velocityY = 0;
-      this.dino.isJumping = false;
-      this.dino.jumpCount = 0;
     }
-  }
+    
+    updateDino() {
+        this.dino.velocityY += this.gravity;
+        this.dino.y += this.dino.velocityY;
+        
+        if (this.dino.y >= this.dino.groundY) {
+            this.dino.y = this.dino.groundY;
+            this.dino.velocityY = 0;
+            this.dino.isJumping = false;
+      this.dino.jumpCount = 0;
+        }
+    }
+    
+    updateObstacles() {
+        this.obstacleTimer++;
 
-  updateObstacles() {
-    this.obstacleTimer++;
-
-    if (this.obstacleTimer >= this.obstacleInterval) {
-      this.createObstacle();
-      this.obstacleTimer = 0;
+        if (this.obstacleTimer >= this.obstacleInterval) {
+            this.createObstacle();
+            this.obstacleTimer = 0;
 
       if (this.level > 3 && Math.random() > 0.8) {
         setTimeout(() => this.createObstacle(), 20);
       }
+        }
+        
+        this.obstacles.forEach((obstacle, index) => {
+            obstacle.x -= this.gameSpeed;
+            
+            if (obstacle.x + obstacle.width < 0) {
+                this.obstacles.splice(index, 1);
+            }
+        });
     }
-
-    this.obstacles.forEach((obstacle, index) => {
-      obstacle.x -= this.gameSpeed;
-
-      if (obstacle.x + obstacle.width < 0) {
-        this.obstacles.splice(index, 1);
-      }
-    });
-  }
 
   updatePowerUps() {
     this.powerUpTimer++;
@@ -352,16 +367,16 @@ class DinoRunPro {
       }
     }
   }
-
-  createObstacle() {
+    
+    createObstacle() {
     const types = [
       "cactus", "rock", "tall-cactus", "banana", "poop", "car", 
       "spike", "fence", "barrel", "robot", "alien", "meteor"
     ];
     const type = types[Math.floor(Math.random() * types.length)];
 
-    const obstacle = {
-      x: this.canvas.width,
+        const obstacle = {
+            x: this.canvas.width,
       y: this.groundY - 50,
       width: 30,
       height: 50,
@@ -395,8 +410,8 @@ class DinoRunPro {
         break;
     }
 
-    this.obstacles.push(obstacle);
-  }
+        this.obstacles.push(obstacle);
+    }
 
   createPowerUp() {
     const types = ["shield", "nitro", "multiJump"];
@@ -414,21 +429,21 @@ class DinoRunPro {
 
     this.powerUps.push(powerUp);
   }
-
-  checkCollisions() {
+    
+    checkCollisions() {
     if (this.shieldActive) return;
 
     this.obstacles.forEach((obstacle) => {
       if (
         this.dino.x < obstacle.x + obstacle.width &&
-        this.dino.x + this.dino.width > obstacle.x &&
-        this.dino.y < obstacle.y + obstacle.height &&
+                this.dino.x + this.dino.width > obstacle.x &&
+                this.dino.y < obstacle.y + obstacle.height &&
         this.dino.y + this.dino.height > obstacle.y
       ) {
-        this.gameOver();
-      }
-    });
-  }
+                this.gameOver();
+            }
+        });
+    }
 
   checkPowerUpCollisions() {
     this.powerUps.forEach((powerUp, index) => {
@@ -469,14 +484,14 @@ class DinoRunPro {
     this.obstacleInterval = Math.max(40, this.obstacleInterval - 5);
     document.getElementById("level").textContent = this.level;
   }
-
-  gameOver() {
-    this.gameRunning = false;
+    
+    gameOver() {
+        this.gameRunning = false;
     const finalScore = Math.floor(this.score / 10);
     this.finalScoreElement.textContent = finalScore;
-
-    if (this.score > this.highScore) {
-      this.highScore = this.score;
+        
+        if (this.score > this.highScore) {
+            this.highScore = this.score;
       this.highScoreElement.textContent = Math.floor(this.highScore / 10);
       localStorage.setItem("dinoRunProHighScore", this.highScore);
       document.getElementById("newHighScore").textContent = finalScore;
@@ -485,11 +500,11 @@ class DinoRunPro {
     }
 
     this.gameOverElement.style.display = "block";
-  }
-
-  updateScore() {
-    this.scoreElement.textContent = Math.floor(this.score / 10);
-  }
+    }
+    
+    updateScore() {
+        this.scoreElement.textContent = Math.floor(this.score / 10);
+    }
 
   updatePowerUpUI() {
     const nitroLevel = document.getElementById("nitroLevel");
@@ -507,10 +522,10 @@ class DinoRunPro {
     shieldStatus.className = `power-up ${this.shieldActive ? 'active' : ''}`;
     multiJumpStatus.className = `power-up ${this.multiJumpActive ? 'active' : ''}`;
   }
-
-  draw() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
+    
+    draw() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
     this.drawBackground();
     this.drawGround();
     this.drawNitroParticles();
@@ -522,7 +537,7 @@ class DinoRunPro {
   }
 
   drawBackground() {
-    const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+        const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
     if (this.nitroActive) {
       gradient.addColorStop(0, "#ff6b6b");
       gradient.addColorStop(0.5, "#ff8e8e");
@@ -532,9 +547,9 @@ class DinoRunPro {
       gradient.addColorStop(0.5, "#98FB98");
       gradient.addColorStop(1, "#90EE90");
     }
-    this.ctx.fillStyle = gradient;
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
+        this.ctx.fillStyle = gradient;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
     this.backgroundOffset += this.gameSpeed * 0.5;
     if (this.backgroundOffset > this.canvas.width) {
       this.backgroundOffset = 0;
@@ -553,19 +568,19 @@ class DinoRunPro {
 
   drawGround() {
     this.ctx.fillStyle = "#8B4513";
-    this.ctx.fillRect(0, this.groundY, this.canvas.width, this.canvas.height - this.groundY);
-
+        this.ctx.fillRect(0, this.groundY, this.canvas.width, this.canvas.height - this.groundY);
+        
     this.ctx.strokeStyle = this.nitroActive ? "#ff6347" : "#654321";
     this.ctx.lineWidth = 3;
-    this.ctx.beginPath();
-    this.ctx.moveTo(0, this.groundY);
-    this.ctx.lineTo(this.canvas.width, this.groundY);
-    this.ctx.stroke();
-  }
-
-  drawDino() {
-    const dino = this.dino;
-
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, this.groundY);
+        this.ctx.lineTo(this.canvas.width, this.groundY);
+        this.ctx.stroke();
+    }
+    
+    drawDino() {
+        const dino = this.dino;
+        
     if (this.shieldActive) {
       this.ctx.shadowBlur = 20;
       this.ctx.shadowColor = "#00ff00";
@@ -619,9 +634,9 @@ class DinoRunPro {
     this.roundRect(dino.x - 15, dino.y + 15, 20, 10, 4);
 
     this.ctx.shadowBlur = 0;
-  }
-
-  drawObstacles() {
+    }
+    
+    drawObstacles() {
     this.obstacles.forEach((obstacle) => {
       this.ctx.save();
       this.ctx.translate(obstacle.x + obstacle.width / 2, obstacle.y + obstacle.height / 2);
@@ -755,7 +770,7 @@ class DinoRunPro {
       const alpha = particle.life / particle.maxLife;
       this.ctx.fillStyle = particle.color;
       this.ctx.globalAlpha = alpha;
-      this.ctx.beginPath();
+                this.ctx.beginPath();
       this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
       this.ctx.fill();
       this.ctx.globalAlpha = 1;
@@ -771,25 +786,25 @@ class DinoRunPro {
       this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
       this.ctx.fill();
       this.ctx.globalAlpha = 1;
-    });
-  }
-
-  drawClouds() {
+        });
+    }
+    
+    drawClouds() {
     this.ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
     this.ctx.shadowBlur = 20;
     this.ctx.shadowColor = "rgba(255, 255, 255, 0.6)";
-
-    const time = Date.now() * 0.0005;
+        
+        const time = Date.now() * 0.0005;
     for (let i = 0; i < 5; i++) {
       const x = ((i * 200 + time * 50) % (this.canvas.width + 100)) - 50;
       const y = 30 + i * 20;
-
-      this.ctx.beginPath();
+            
+            this.ctx.beginPath();
       this.ctx.arc(x, y, 18, 0, Math.PI * 2);
       this.ctx.arc(x + 25, y, 22, 0, Math.PI * 2);
       this.ctx.arc(x + 50, y, 18, 0, Math.PI * 2);
-      this.ctx.fill();
-    }
+            this.ctx.fill();
+        }
 
     this.ctx.shadowBlur = 0;
   }
@@ -807,13 +822,13 @@ class DinoRunPro {
     this.ctx.quadraticCurveTo(x, y, x + radius, y);
     this.ctx.closePath();
     this.ctx.fill();
-  }
-
-  gameLoop() {
-    this.update();
-    this.draw();
-    requestAnimationFrame(() => this.gameLoop());
-  }
+    }
+    
+    gameLoop() {
+        this.update();
+        this.draw();
+        requestAnimationFrame(() => this.gameLoop());
+    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -492,6 +492,17 @@
                     console.log('Using FarcasterSDK');
                 } else {
                     console.log('No Farcaster SDK found, running standalone');
+                    // Force hide splash screen if it exists
+                    setTimeout(() => {
+                        const splashScreen = document.querySelector('[data-testid="splash-screen"]') || 
+                                           document.querySelector('.splash-screen') ||
+                                           document.querySelector('#splash-screen') ||
+                                           document.querySelector('[class*="splash"]');
+                        if (splashScreen) {
+                            splashScreen.style.display = 'none';
+                            splashScreen.remove();
+                        }
+                    }, 1000);
                     return;
                 }
                 
@@ -499,22 +510,46 @@
                 sdk.init({
                     name: 'DinoRun Pro',
                     version: '1.0.0',
-                    iconUrl: 'https://dino-run-mini-lqbi2vr9e-zerologs-projects.vercel.app/snake-icon.png',
-                    homeUrl: 'https://dino-run-mini-lqbi2vr9e-zerologs-projects.vercel.app',
-                    splashImageUrl: 'https://dino-run-mini-lqbi2vr9e-zerologs-projects.vercel.app/snake-hero.png',
+                    iconUrl: 'https://dino-run-mini-73ihqf2t5-zerologs-projects.vercel.app/snake-icon.png',
+                    homeUrl: 'https://dino-run-mini-73ihqf2t5-zerologs-projects.vercel.app',
+                    splashImageUrl: 'https://dino-run-mini-73ihqf2t5-zerologs-projects.vercel.app/snake-hero.png',
                     splashBackgroundColor: '#667eea'
                 }).then(() => {
+                    console.log('SDK init completed');
                     if (sdk.actions && sdk.actions.ready) {
+                        console.log('Calling sdk.actions.ready()');
                         return sdk.actions.ready();
                     }
                 }).then(() => {
                     console.log('Farcaster SDK initialized successfully');
                 }).catch((error) => {
                     console.log('SDK initialization failed:', error);
+                    // Force hide splash screen on error
+                    setTimeout(() => {
+                        const splashScreen = document.querySelector('[data-testid="splash-screen"]') || 
+                                           document.querySelector('.splash-screen') ||
+                                           document.querySelector('#splash-screen') ||
+                                           document.querySelector('[class*="splash"]');
+                        if (splashScreen) {
+                            splashScreen.style.display = 'none';
+                            splashScreen.remove();
+                        }
+                    }, 500);
                 });
                 
             } catch (error) {
                 console.log('App initialization failed:', error);
+                // Force hide splash screen on error
+                setTimeout(() => {
+                    const splashScreen = document.querySelector('[data-testid="splash-screen"]') || 
+                                       document.querySelector('.splash-screen') ||
+                                       document.querySelector('#splash-screen') ||
+                                       document.querySelector('[class*="splash"]');
+                    if (splashScreen) {
+                        splashScreen.style.display = 'none';
+                        splashScreen.remove();
+                    }
+                }, 500);
             }
         }
         
