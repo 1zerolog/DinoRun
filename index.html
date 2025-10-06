@@ -205,43 +205,70 @@
         // Farcaster Mini App SDK integration
         let sdk;
         
-        // Initialize Farcaster SDK
-        async function initializeFarcasterSDK() {
+        // Check if we're in Farcaster environment and initialize
+        function initializeApp() {
             try {
-                // Check if we're in a Farcaster environment
-                if (window.farcaster) {
+                // Check for Farcaster SDK
+                if (window.farcaster && window.farcaster.init) {
                     sdk = window.farcaster;
-                } else if (window.minikit) {
-                    sdk = window.minikit;
+                    console.log('Using window.farcaster SDK');
+                } else if (window.FarcasterSDK) {
+                    sdk = window.FarcasterSDK;
+                    console.log('Using FarcasterSDK');
                 } else {
-                    // Fallback for non-Farcaster environments
-                    console.log('Not in Farcaster environment, running standalone');
+                    console.log('No Farcaster SDK found, running standalone');
+                    // Hide splash screen manually if it exists
+                    const splashScreen = document.querySelector('[data-testid="splash-screen"]') || 
+                                       document.querySelector('.splash-screen') ||
+                                       document.querySelector('#splash-screen');
+                    if (splashScreen) {
+                        splashScreen.style.display = 'none';
+                    }
                     return;
                 }
                 
-                // Initialize the SDK
-                await sdk.init({
-                    name: 'DinoRun',
+                // Initialize SDK
+                sdk.init({
+                    name: 'Dino Run',
                     version: '1.0.0',
-                    iconUrl: 'https://dino-run-mini-1jcxei4xo-zerologs-projects.vercel.app/snake-icon.png',
-                    homeUrl: 'https://dino-run-mini-1jcxei4xo-zerologs-projects.vercel.app',
-                    splashImageUrl: 'https://dino-run-mini-1jcxei4xo-zerologs-projects.vercel.app/snake-hero.png',
+                    iconUrl: 'https://dino-run-mini-qvvvvk2if-zerologs-projects.vercel.app/snake-icon.png',
+                    homeUrl: 'https://dino-run-mini-qvvvvk2if-zerologs-projects.vercel.app',
+                    splashImageUrl: 'https://dino-run-mini-qvvvvk2if-zerologs-projects.vercel.app/snake-hero.png',
                     splashBackgroundColor: '#667eea'
+                }).then(() => {
+                    // Signal ready
+                    if (sdk.actions && sdk.actions.ready) {
+                        return sdk.actions.ready();
+                    }
+                }).then(() => {
+                    console.log('Farcaster SDK initialized successfully');
+                }).catch((error) => {
+                    console.log('SDK initialization failed:', error);
+                    // Hide splash screen manually
+                    const splashScreen = document.querySelector('[data-testid="splash-screen"]') || 
+                                       document.querySelector('.splash-screen') ||
+                                       document.querySelector('#splash-screen');
+                    if (splashScreen) {
+                        splashScreen.style.display = 'none';
+                    }
                 });
                 
-                // Signal that the app is ready
-                await sdk.actions.ready();
-                console.log('Farcaster SDK initialized successfully');
-                
             } catch (error) {
-                console.log('SDK initialization failed:', error);
-                // Continue without SDK
+                console.log('App initialization failed:', error);
+                // Hide splash screen manually
+                const splashScreen = document.querySelector('[data-testid="splash-screen"]') || 
+                                   document.querySelector('.splash-screen') ||
+                                   document.querySelector('#splash-screen');
+                if (splashScreen) {
+                    splashScreen.style.display = 'none';
+                }
             }
         }
         
         // Initialize when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
-            initializeFarcasterSDK();
+            // Wait a bit for SDK to potentially load
+            setTimeout(initializeApp, 100);
         });
         
         // Handle restart button in game over modal
