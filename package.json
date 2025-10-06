@@ -8,9 +8,7 @@
     "build": "echo 'Build complete'",
     "deploy": "vercel --prod"
   },
-  "dependencies": {
-    "@base-org/minikit": "^1.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "vercel": "^32.0.0"
   },

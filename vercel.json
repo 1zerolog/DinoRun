@@ -10,18 +10,10 @@
       "use": "@vercel/node"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/api/webhook",
-      "dest": "/api/webhook.js"
-    },
-    {
-      "src": "/.well-known/farcaster.json",
-      "dest": "/app/.well-known/farcaster.json"
+      "source": "/.well-known/farcaster.json",
+      "destination": "/app/.well-known/farcaster.json"
     }
   ],
   "headers": [
