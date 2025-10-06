@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DinoRun Mini App</title>
+    <meta name="description" content="Play DinoRun - an exciting endless runner game on Farcaster!">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://your-app-url.vercel.app">
+    <meta property="og:title" content="DinoRun Mini App">
+    <meta property="og:description" content="Play DinoRun - an exciting endless runner game on Farcaster!">
+    <meta property="og:image" content="https://your-app-url.vercel.app/screenshot-portrait.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://your-app-url.vercel.app">
+    <meta property="twitter:title" content="DinoRun Mini App">
+    <meta property="twitter:description" content="Play DinoRun - an exciting endless runner game on Farcaster!">
+    <meta property="twitter:image" content="https://your-app-url.vercel.app/screenshot-portrait.png">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+        
+        .game-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 100%;
+            width: 100%;
+            max-width: 900px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        canvas {
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .score-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .game-over {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+        
+        .game-over h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #ff6b6b;
+        }
+        
+        .game-over p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .instructions {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+        
+        .instructions strong {
+            color: #ffd700;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🦕 DinoRun</h1>
+        <p class="subtitle">Endless Runner Game on Farcaster</p>
+        
+        <div class="score-container">
+            <div>Score: <span id="score">0</span></div>
+            <div>High Score: <span id="highScore">0</span></div>
+        </div>
+        
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        
+        <div class="controls">
+            <button class="btn" id="jumpBtn">🦘 Jump</button>
+            <button class="btn" id="restartBtn">🔄 Restart</button>
+            <button class="btn" id="shareBtn">📤 Share Score</button>
+        </div>
+        
+        <div class="instructions">
+            <strong>How to Play:</strong><br>
+            • Tap/Click or press SPACE to jump<br>
+            • Swipe right or press RIGHT ARROW for nitro boost<br>
+            • Avoid obstacles and try to get the highest score!<br>
+            • Share your score with friends on Farcaster! 🚀
+        </div>
+    </div>
+    
+    <div id="gameOver" class="game-over">
+        <h2>Game Over!</h2>
+        <p>Final Score: <span id="finalScore">0</span></p>
+        <button class="btn" id="restartBtn2">🔄 Play Again</button>
+    </div>
+    
+    <script src="game.js"></script>
+    
+    <script>
+        // Farcaster Mini App integration
+        if (typeof window !== 'undefined' && window.minikit) {
+            // Initialize MiniKit if available
+            window.minikit.init({
+                name: 'DinoRun',
+                version: '1.0.0',
+                iconUrl: 'https://your-app-url.vercel.app/snake-icon.png',
+                homeUrl: 'https://your-app-url.vercel.app',
+                splashImageUrl: 'https://your-app-url.vercel.app/snake-hero.png',
+                splashBackgroundColor: '#667eea'
+            });
+        }
+        
+        // Handle restart button in game over modal
+        document.getElementById('restartBtn2').addEventListener('click', () => {
+            document.getElementById('gameOver').style.display = 'none';
+            if (window.gameInstance) {
+                window.gameInstance.restart();
+            }
+        });
+    </script>
+</body>
+</html>

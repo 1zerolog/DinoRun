@@ -1,0 +1,20 @@
+{
+  "name": "dino-run-mini-app",
+  "version": "1.0.0",
+  "description": "DinoRun Mini App for Farcaster",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Build complete'",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@base-org/minikit": "^1.0.0"
+  },
+  "devDependencies": {
+    "vercel": "^32.0.0"
+  },
+  "keywords": ["farcaster", "mini-app", "game", "dino", "base"],
+  "author": "DinoRun Team",
+  "license": "MIT"
+}
