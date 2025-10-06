@@ -1,20 +1,20 @@
 {
-  "accountAssociation": {
-    "header": "",
-    "payload": "",
-    "signature": ""
-  },
   "frame": {
     "name": "Dino Run",
     "version": "1",
-    "iconUrl": "https://dino-run-mini-hu3yhzj4k-zerologs-projects.vercel.app/snake-icon.png",
-    "homeUrl": "https://dino-run-mini-hu3yhzj4k-zerologs-projects.vercel.app",
-    "imageUrl": "https://dino-run-mini-hu3yhzj4k-zerologs-projects.vercel.app/screenshot-portrait.png",
-    "splashImageUrl": "https://dino-run-mini-hu3yhzj4k-zerologs-projects.vercel.app/snake-hero.png",
+    "iconUrl": "https://dino-run-mini-rcn992u4q-zerologs-projects.vercel.app/snake-icon.png",
+    "homeUrl": "https://dino-run-mini-rcn992u4q-zerologs-projects.vercel.app",
+    "imageUrl": "https://dino-run-mini-rcn992u4q-zerologs-projects.vercel.app/screenshot-portrait.png",
+    "splashImageUrl": "https://dino-run-mini-rcn992u4q-zerologs-projects.vercel.app/snake-hero.png",
     "splashBackgroundColor": "#667eea",
-    "webhookUrl": "https://dino-run-mini-hu3yhzj4k-zerologs-projects.vercel.app/api/webhook",
+    "webhookUrl": "https://dino-run-mini-rcn992u4q-zerologs-projects.vercel.app/api/webhook",
     "subtitle": "Endless Runner Game",
     "description": "Play DinoRun - an exciting endless runner game where you control a dinosaur jumping over obstacles. Try to get the highest score and share it with friends on Farcaster!",
     "primaryCategory": "games"
+  },
+  "accountAssociation": {
+    "header": "eyJmaWQiOjI4MjY1MSwidHlwZSI6ImF1dGgiLCJrZXkiOiIweDEzOGNGQ0QxZTVFMEFkZkM4ZUZmQzMxNzg3MmY4YWU5MjkxMjdGMjgifQ",
+    "payload": "eyJkb21haW4iOiJkaW5vLXJ1bi1taW5pLWFwcC52ZXJjZWwuYXBwIn0",
+    "signature": "Ug/T6Ownp0GkIp+sZ8JUR9WLyD2ptHceCLyi3jdW6S9YQesqy25LEzHXdJoMI14ABkCOlSBFTwOCluvm/KP75Rw="
   }
 }

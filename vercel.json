@@ -10,10 +10,11 @@
       "use": "@vercel/node"
     }
   ],
-  "rewrites": [
+  "redirects": [
     {
       "source": "/.well-known/farcaster.json",
-      "destination": "/app/.well-known/farcaster.json"
+      "destination": "https://api.farcaster.xyz/miniapps/hosted-manifest/0199bb90-2b5c-f7ba-2682-2fee9e149544",
+      "statusCode": 307
     }
   ],
   "headers": [
