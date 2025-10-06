@@ -202,18 +202,47 @@
     <script src="game.js"></script>
     
     <script>
-        // Farcaster Mini App integration
-        if (typeof window !== 'undefined' && window.minikit) {
-            // Initialize MiniKit if available
-            window.minikit.init({
-                name: 'DinoRun',
-                version: '1.0.0',
-                iconUrl: 'https://your-app-url.vercel.app/snake-icon.png',
-                homeUrl: 'https://your-app-url.vercel.app',
-                splashImageUrl: 'https://your-app-url.vercel.app/snake-hero.png',
-                splashBackgroundColor: '#667eea'
-            });
+        // Farcaster Mini App SDK integration
+        let sdk;
+        
+        // Initialize Farcaster SDK
+        async function initializeFarcasterSDK() {
+            try {
+                // Check if we're in a Farcaster environment
+                if (window.farcaster) {
+                    sdk = window.farcaster;
+                } else if (window.minikit) {
+                    sdk = window.minikit;
+                } else {
+                    // Fallback for non-Farcaster environments
+                    console.log('Not in Farcaster environment, running standalone');
+                    return;
+                }
+                
+                // Initialize the SDK
+                await sdk.init({
+                    name: 'DinoRun',
+                    version: '1.0.0',
+                    iconUrl: 'https://dino-run-mini-1jcxei4xo-zerologs-projects.vercel.app/snake-icon.png',
+                    homeUrl: 'https://dino-run-mini-1jcxei4xo-zerologs-projects.vercel.app',
+                    splashImageUrl: 'https://dino-run-mini-1jcxei4xo-zerologs-projects.vercel.app/snake-hero.png',
+                    splashBackgroundColor: '#667eea'
+                });
+                
+                // Signal that the app is ready
+                await sdk.actions.ready();
+                console.log('Farcaster SDK initialized successfully');
+                
+            } catch (error) {
+                console.log('SDK initialization failed:', error);
+                // Continue without SDK
+            }
         }
+        
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeFarcasterSDK();
+        });
         
         // Handle restart button in game over modal
         document.getElementById('restartBtn2').addEventListener('click', () => {
@@ -222,6 +251,30 @@
                 window.gameInstance.restart();
             }
         });
+        
+        // Enhanced share function for Farcaster
+        function shareScoreToFarcaster(score) {
+            if (sdk && sdk.actions && sdk.actions.share) {
+                const shareText = `I just scored ${score} points in DinoRun! 🦕 Can you beat my score? Play at https://dino-run-mini-1jcxei4xo-zerologs-projects.vercel.app`;
+                
+                sdk.actions.share({
+                    text: shareText,
+                    url: 'https://dino-run-mini-1jcxei4xo-zerologs-projects.vercel.app'
+                });
+            } else {
+                // Fallback to regular sharing
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'DinoRun Score',
+                        text: `I just scored ${score} points in DinoRun! 🦕`,
+                        url: 'https://dino-run-mini-1jcxei4xo-zerologs-projects.vercel.app'
+                    });
+                }
+            }
+        }
+        
+        // Make share function globally available
+        window.shareScoreToFarcaster = shareScoreToFarcaster;
     </script>
 </body>
 </html>

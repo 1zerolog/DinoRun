@@ -1,5 +1,5 @@
 class DinoRunGame {
-  constructor() {
+    constructor() {
     this.canvas = document.getElementById("gameCanvas")
     this.ctx = this.canvas.getContext("2d")
     this.scoreElement = document.getElementById("score")
@@ -27,32 +27,32 @@ class DinoRunGame {
     this.touchStartX = 0
     this.touchEndX = 0
     this.isTouching = false
-
-    // Dino properties
-    this.dino = {
-      x: 50,
-      y: this.canvas.height - 100,
-      width: 40,
-      height: 50,
-      velocityY: 0,
-      isJumping: false,
+        
+        // Dino properties
+        this.dino = {
+            x: 50,
+            y: this.canvas.height - 100,
+            width: 40,
+            height: 50,
+            velocityY: 0,
+            isJumping: false,
       groundY: this.canvas.height - 100,
     }
-
-    // Obstacles array
+        
+        // Obstacles array
     this.obstacles = []
     this.obstacleTimer = 0
     this.obstacleInterval = 70 // Reduced from 120 for more frequent spawning
-
-    // Ground
+        
+        // Ground
     this.groundY = this.canvas.height - 50
 
     this.particles = []
-
+        
     this.init()
-  }
-
-  init() {
+    }
+    
+    init() {
     this.highScoreElement.textContent = this.highScore
     this.setupEventListeners()
     this.resizeCanvas()
@@ -75,10 +75,10 @@ class DinoRunGame {
     window.addEventListener("resize", () => {
       this.resizeCanvas()
     })
-  }
-
-  setupEventListeners() {
-    // Keyboard controls
+    }
+    
+    setupEventListeners() {
+        // Keyboard controls
     document.addEventListener("keydown", (e) => {
       if (e.code === "Space" || e.code === "ArrowUp") {
         e.preventDefault()
@@ -96,8 +96,8 @@ class DinoRunGame {
         this.deactivateNitro()
       }
     })
-
-    // Mouse/touch controls
+        
+        // Mouse/touch controls
     this.jumpBtn.addEventListener("click", () => this.jump())
     this.restartBtn.addEventListener("click", () => this.restart())
 
@@ -200,15 +200,15 @@ class DinoRunGame {
       this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
       this.ctx.fill()
     })
-  }
-
-  jump() {
-    if (!this.gameRunning) {
+    }
+    
+    jump() {
+        if (!this.gameRunning) {
       this.startGame()
       return
-    }
-
-    if (!this.dino.isJumping) {
+        }
+        
+        if (!this.dino.isJumping) {
       this.dino.velocityY = this.jumpPower
       this.dino.isJumping = true
       this.createJumpParticles()
@@ -267,13 +267,13 @@ class DinoRunGame {
     this.dino.isJumping = false
     this.gameOverElement.style.display = "none"
     this.updateScore()
-  }
-
-  restart() {
+    }
+    
+    restart() {
     this.startGame()
-  }
-
-  update() {
+    }
+    
+    update() {
     if (!this.gameRunning) return
 
     this.updateDino()
@@ -290,24 +290,24 @@ class DinoRunGame {
       if (!this.nitroActive) {
         this.gameSpeed = this.baseGameSpeed
       }
+        }
     }
-  }
-
-  updateDino() {
-    // Apply gravity
+    
+    updateDino() {
+        // Apply gravity
     this.dino.velocityY += this.gravity
     this.dino.y += this.dino.velocityY
-
-    // Ground collision
-    if (this.dino.y >= this.dino.groundY) {
+        
+        // Ground collision
+        if (this.dino.y >= this.dino.groundY) {
       this.dino.y = this.dino.groundY
       this.dino.velocityY = 0
       this.dino.isJumping = false
+        }
     }
-  }
-
-  updateObstacles() {
-    // Create new obstacles
+    
+    updateObstacles() {
+        // Create new obstacles
     this.obstacleTimer++
 
     const dynamicInterval = Math.max(30, this.obstacleInterval - Math.floor(this.score / 500))
@@ -321,27 +321,27 @@ class DinoRunGame {
           this.createObstacle()
         }, 15)
       }
-    }
-
-    // Move obstacles
-    this.obstacles.forEach((obstacle, index) => {
+        }
+        
+        // Move obstacles
+        this.obstacles.forEach((obstacle, index) => {
       obstacle.x -= this.gameSpeed
-
-      if (obstacle.x + obstacle.width < 0) {
+            
+            if (obstacle.x + obstacle.width < 0) {
         this.obstacles.splice(index, 1)
-      }
+            }
     })
-  }
-
-  createObstacle() {
+    }
+    
+    createObstacle() {
     const types = ["cactus", "rock", "tall-cactus", "banana", "poop", "car"]
     const type = types[Math.floor(Math.random() * types.length)]
 
-    const obstacle = {
-      x: this.canvas.width,
-      y: this.groundY - 40,
-      width: 20,
-      height: 40,
+        const obstacle = {
+            x: this.canvas.width,
+            y: this.groundY - 40,
+            width: 20,
+            height: 40,
       type: type,
     }
 
@@ -367,40 +367,40 @@ class DinoRunGame {
     }
 
     this.obstacles.push(obstacle)
-  }
-
-  checkCollisions() {
+    }
+    
+    checkCollisions() {
     this.obstacles.forEach((obstacle) => {
       if (
         this.dino.x < obstacle.x + obstacle.width &&
-        this.dino.x + this.dino.width > obstacle.x &&
-        this.dino.y < obstacle.y + obstacle.height &&
+                this.dino.x + this.dino.width > obstacle.x &&
+                this.dino.y < obstacle.y + obstacle.height &&
         this.dino.y + this.dino.height > obstacle.y
       ) {
         this.gameOver()
-      }
+            }
     })
-  }
-
-  gameOver() {
+    }
+    
+    gameOver() {
     this.gameRunning = false
     this.finalScoreElement.textContent = Math.floor(this.score / 10)
-
-    if (this.score > this.highScore) {
+        
+        if (this.score > this.highScore) {
       this.highScore = this.score
       this.highScoreElement.textContent = Math.floor(this.highScore / 10)
       localStorage.setItem("dinoRunHighScore", this.highScore)
     }
 
     this.gameOverElement.style.display = "block"
-  }
-
-  updateScore() {
+    }
+    
+    updateScore() {
     this.scoreElement.textContent = Math.floor(this.score / 10)
-  }
-
-  draw() {
-    // Clear canvas
+    }
+    
+    draw() {
+        // Clear canvas
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
     const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height)
@@ -432,9 +432,9 @@ class DinoRunGame {
     this.drawObstacles()
     this.drawParticles()
     this.drawClouds()
-  }
-
-  drawDino() {
+    }
+    
+    drawDino() {
     const dino = this.dino
 
     const dinoGradient = this.ctx.createLinearGradient(dino.x, dino.y, dino.x, dino.y + dino.height)
@@ -453,8 +453,8 @@ class DinoRunGame {
     // Dino body with rounded corners
     this.ctx.fillStyle = dinoGradient
     this.roundRect(dino.x, dino.y, dino.width, dino.height, 5)
-
-    // Dino head
+        
+        // Dino head
     this.ctx.fillStyle = this.nitroActive ? "#ffed4e" : "#68d391"
     this.roundRect(dino.x + 25, dino.y - 15, 20, 20, 5)
 
@@ -473,8 +473,8 @@ class DinoRunGame {
     const legOffset = this.gameRunning ? Math.sin(Date.now() * (this.nitroActive ? 0.04 : 0.02)) * 3 : 0
     this.roundRect(dino.x + 10, dino.y + dino.height, 5, 10, 2)
     this.roundRect(dino.x + 25, dino.y + dino.height + legOffset, 5, 10, 2)
-
-    // Dino tail
+        
+        // Dino tail
     this.ctx.fillStyle = this.nitroActive ? "#ffed4e" : "#68d391"
     this.roundRect(dino.x - 10, dino.y + 10, 15, 8, 3)
 
@@ -494,9 +494,9 @@ class DinoRunGame {
     this.ctx.quadraticCurveTo(x, y, x + radius, y)
     this.ctx.closePath()
     this.ctx.fill()
-  }
-
-  drawObstacles() {
+    }
+    
+    drawObstacles() {
     this.obstacles.forEach((obstacle) => {
       const obstacleGradient = this.ctx.createLinearGradient(
         obstacle.x,
@@ -625,15 +625,15 @@ class DinoRunGame {
         obstacleGradient.addColorStop(1, "#2f855a")
         this.ctx.fillStyle = obstacleGradient
         this.roundRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height, 3)
-
-        // Cactus arms
+            
+            // Cactus arms
         this.roundRect(obstacle.x - 5, obstacle.y + 10, 8, 15, 2)
         this.roundRect(obstacle.x + obstacle.width - 3, obstacle.y + 5, 8, 12, 2)
       }
     })
-  }
-
-  drawClouds() {
+    }
+    
+    drawClouds() {
     this.ctx.fillStyle = "rgba(255, 255, 255, 0.3)"
     this.ctx.shadowBlur = 15
     this.ctx.shadowColor = "rgba(255, 255, 255, 0.5)"
@@ -651,9 +651,9 @@ class DinoRunGame {
     }
 
     this.ctx.shadowBlur = 0
-  }
-
-  gameLoop() {
+    }
+    
+    gameLoop() {
     this.update()
     this.draw()
     requestAnimationFrame(() => this.gameLoop())
@@ -661,27 +661,34 @@ class DinoRunGame {
 
   shareScore() {
     const score = Math.floor(this.score / 10)
-    const text = `I just scored ${score} points in DinoRun! 🦕 Can you beat my score?`
-    const url = window.location.href
-
-    if (navigator.share) {
-      navigator
-        .share({
-          title: "DinoRun Score",
-          text: text,
-          url: url,
-        })
-        .catch((err) => console.log("Error sharing:", err))
+    
+    // Use Farcaster SDK if available
+    if (window.shareScoreToFarcaster) {
+      window.shareScoreToFarcaster(score)
     } else {
-      const shareText = `${text}\n${url}`
-      navigator.clipboard
-        .writeText(shareText)
-        .then(() => {
-          alert("Score copied to clipboard! Share it on Farcaster!")
-        })
-        .catch((err) => {
-          console.log("Error copying to clipboard:", err)
-        })
+      // Fallback to regular sharing
+      const text = `I just scored ${score} points in DinoRun! 🦕 Can you beat my score?`
+      const url = window.location.href
+
+      if (navigator.share) {
+        navigator
+          .share({
+            title: "DinoRun Score",
+            text: text,
+            url: url,
+          })
+          .catch((err) => console.log("Error sharing:", err))
+      } else {
+        const shareText = `${text}\n${url}`
+        navigator.clipboard
+          .writeText(shareText)
+          .then(() => {
+            alert("Score copied to clipboard! Share it on Farcaster!")
+          })
+          .catch((err) => {
+            console.log("Error copying to clipboard:", err)
+          })
+      }
     }
   }
 }
