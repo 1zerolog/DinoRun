@@ -1,5 +1,5 @@
 // Base Mini App Configuration
-const ROOT_URL = process.env.NEXT_PUBLIC_URL || "https://your-app-url.vercel.app";
+const ROOT_URL = process.env.NEXT_PUBLIC_URL || "https://dino-run-mini-6vig3fowx-zerologs-projects.vercel.app";
 
 export const minikitConfig = {
   accountAssociation: { // this will be added in step 5
