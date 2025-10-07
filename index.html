@@ -3,200 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🦕 DinoRun Pro - Web3 Gaming Experience</title>
-    <meta name="description" content="Play the ultimate DinoRun experience with Web3 integration, NFT minting, and wallet connectivity!">
+    <title>🦕 DinoRun</title>
     
-    <!-- Open Graph / Social Media -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app">
-    <meta property="og:title" content="🦕 DinoRun Pro - Web3 Gaming Experience">
-    <meta property="og:description" content="Play the ultimate DinoRun experience with Web3 integration, NFT minting, and wallet connectivity!">
-    <meta property="og:image" content="https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app/screenshot-portrait.png">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app">
-    <meta property="twitter:title" content="🦕 DinoRun Pro - Web3 Gaming Experience">
-    <meta property="twitter:description" content="Play the ultimate DinoRun experience with Web3 integration, NFT minting, and wallet connectivity!">
-    <meta property="twitter:image" content="https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app/screenshot-portrait.png">
-    
-    <!-- Farcaster Mini App Embed (CRITICAL for feed discovery) -->
+    <!-- Farcaster Mini App Meta Tags -->
     <meta property="fc:miniapp" content='{
         "version": "1",
-        "imageUrl": "https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app/screenshot-portrait.png",
+        "imageUrl": "https://dino-run-mini-apfbhz9cw-zerologs-projects.vercel.app/screenshot-portrait.png",
         "button": {
-            "title": "🦕 Play DinoRun Pro",
+            "title": "🦕 Play DinoRun",
             "action": {
                 "type": "link",
-                "url": "https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app"
+                "url": "https://dino-run-mini-apfbhz9cw-zerologs-projects.vercel.app"
             }
         }
     }'>
-    
-    <!-- Backward compatibility with fc:frame -->
-    <meta property="fc:frame" content='{
-        "version": "1",
-        "imageUrl": "https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app/screenshot-portrait.png",
-        "button": {
-            "title": "🦕 Play DinoRun Pro",
-            "action": {
-                "type": "link",
-                "url": "https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app"
-            }
-        }
-    }'>
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Fredoka+One:wght@400&display=swap" rel="stylesheet">
-    
-    <!-- Preconnect to Quick Auth Server for performance -->
-    <link rel="preconnect" href="https://auth.farcaster.xyz">
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: 'Orbitron', monospace;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            padding: 10px;
-            color: white;
-            overflow-x: hidden;
+            align-items: center;
         }
         
         .game-container {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 25px;
-            padding: 20px;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             text-align: center;
-            max-width: 100%;
-            width: 100%;
-            max-width: 1000px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-        }
-        
-        .game-container::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24, #f0932b, #eb4d4b);
-            border-radius: 25px;
-            z-index: -1;
-            animation: rainbow-border 3s linear infinite;
-        }
-        
-        @keyframes rainbow-border {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            max-width: 700px;
         }
         
         h1 {
-            font-family: 'Fredoka One', cursive;
-            font-size: 3rem;
-            margin-bottom: 10px;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
-            background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: glow 2s ease-in-out infinite alternate;
+            color: #4CAF50;
+            font-size: 2.5em;
+            margin: 0 0 20px 0;
         }
         
-        @keyframes glow {
-            from { text-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
-            to { text-shadow: 0 0 30px rgba(255, 107, 107, 0.8); }
-        }
-        
-        .subtitle {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            opacity: 0.9;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-        
-        .wallet-section {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .wallet-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        
-        .wallet-address {
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .score-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-        
-        .score-item {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            padding: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-        }
-        
-        .score-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-bottom: 5px;
-        }
-        
-        .score-value {
-            font-size: 1.3rem;
-            font-weight: 900;
-            color: #ffd700;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        #gameCanvas {
+            border: 3px solid #333;
+            border-radius: 10px;
+            background: #87CEEB;
+            cursor: pointer;
         }
         
         .canvas-wrapper {
             position: relative;
             display: inline-block;
-        }
-        
-        #gameCanvas {
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            max-width: 100%;
-            height: auto;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%);
+            margin: 20px 0;
         }
         
         .game-start-message {
@@ -210,634 +69,54 @@
             border-radius: 15px;
             text-align: center;
             z-index: 10;
-            border: 2px solid #667eea;
         }
         
         .game-start-message h2 {
             margin: 0 0 10px 0;
-            font-size: 1.5em;
-            color: #667eea;
+            color: #4CAF50;
         }
         
         .game-start-message p {
             margin: 5px 0;
-            font-size: 0.9em;
-        }
-        
-        .controls-hint {
-            font-size: 0.8em !important;
-            color: #aaa !important;
-            margin-top: 10px !important;
-        }
-        
-        .controls-info {
-            text-align: center;
-            margin: 15px 0;
-            padding: 10px;
-            background: rgba(102, 126, 234, 0.1);
-            border-radius: 10px;
-            border: 1px solid rgba(102, 126, 234, 0.3);
-        }
-        
-        .controls-info p {
-            margin: 0;
-            color: #667eea;
-            font-size: 0.9em;
-        }
-        
-        .controls {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
-        .btn {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            border: none;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 700;
-            font-family: 'Orbitron', monospace;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn:hover::before {
-            left: 100%;
-        }
-        
-        .btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-        }
-        
-        .btn:active {
-            transform: translateY(-1px) scale(1.02);
-        }
-        
-        .btn.primary {
-            background: linear-gradient(45deg, #ffd700, #ff8c00);
-        }
-        
-        .btn.secondary {
-            background: linear-gradient(45deg, #4ecdc4, #44a08d);
-        }
-        
-        .btn.danger {
-            background: linear-gradient(45deg, #ff4757, #c44569);
-        }
-        
-        .btn.wallet {
-            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
-        }
-        
-        .btn.nft {
-            background: linear-gradient(45deg, #fd79a8, #fdcb6e);
-        }
-        
-        .game-over {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            color: white;
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            backdrop-filter: blur(20px);
-            z-index: 1000;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-        }
-        
-        .game-over h2 {
-            font-family: 'Fredoka One', cursive;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: #ff6b6b;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        
-        .game-over p {
-            font-size: 1.3rem;
-            margin-bottom: 25px;
-            color: #ffd700;
         }
         
         .instructions {
-            margin-top: 25px;
-            font-size: 0.95rem;
-            opacity: 0.9;
-            line-height: 1.6;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 20px;
+            color: #666;
+            font-size: 1.1em;
         }
         
-        .instructions strong {
-            color: #ffd700;
-            font-weight: 700;
-        }
-        
-        .instructions .emoji {
-            font-size: 1.2rem;
-        }
-        
-        .loading {
-            display: none;
-            text-align: center;
-            margin: 20px 0;
-        }
-        
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid #ffd700;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .power-ups {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 15px 0;
-            flex-wrap: wrap;
-        }
-        
-        .power-up {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 10px 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-        
-        .power-up.active {
-            background: linear-gradient(45deg, #ffd700, #ff8c00);
-            animation: pulse 1s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.2rem;
-            }
-            
-            .subtitle {
-                font-size: 1.1rem;
-            }
-            
-            .controls {
-                grid-template-columns: 1fr 1fr;
-            }
-            
-            .btn {
-                padding: 12px 20px;
-                font-size: 14px;
-            }
-            
-            .score-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .wallet-info {
-                flex-direction: column;
-                text-align: center;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .game-container {
-                padding: 15px;
-                margin: 5px;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .controls {
-                grid-template-columns: 1fr;
-            }
-            
-            .btn {
-                width: 100%;
-            }
+        #score {
+            color: #4CAF50;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class="game-container">
-        <h1>🦕 DinoRun Pro</h1>
-        <p class="subtitle">Web3 Gaming Experience • NFT Rewards • Wallet Integration</p>
+        <h1>🦕 DinoRun</h1>
         
-        <!-- Wallet Section -->
-        <div class="wallet-section">
-            <div class="wallet-info">
-                <div>
-                    <strong>🔗 Wallet:</strong>
-                    <span id="walletStatus" class="wallet-address">Not Connected</span>
-                </div>
-                <button class="btn wallet" id="connectWalletBtn">Connect Wallet</button>
-            </div>
-        </div>
-        
-        <!-- Score Display -->
-        <div class="score-container">
-            <div class="score-item">
-                <div class="score-label">Score</div>
-                <div class="score-value" id="score">0</div>
-            </div>
-            <div class="score-item">
-                <div class="score-label">High Score</div>
-                <div class="score-value" id="highScore">0</div>
-            </div>
-            <div class="score-item">
-                <div class="score-label">NFTs Minted</div>
-                <div class="score-value" id="nftCount">0</div>
-            </div>
-            <div class="score-item">
-                <div class="score-label">Level</div>
-                <div class="score-value" id="level">1</div>
-            </div>
+        <!-- Score -->
+        <div>
+            <span style="font-size: 24px;">Score: <span id="score">0</span></span>
         </div>
         
         <!-- Game Canvas -->
         <div class="canvas-wrapper">
-            <canvas id="gameCanvas" width="800" height="300"></canvas>
+            <canvas id="gameCanvas" width="600" height="300"></canvas>
             <div id="gameStartMessage" class="game-start-message">
                 <h2>🦕 DinoRun</h2>
-                <p>Get Ready! Game starts in 2 seconds...</p>
-                <p class="controls-hint">Press SPACE or CLICK to jump</p>
+                <p>Game starts in 1 second...</p>
+                <p>Press SPACE or CLICK to jump!</p>
             </div>
-        </div>
-        
-        <!-- Simple Controls Info -->
-        <div class="controls-info">
-            <p>🎮 <strong>Controls:</strong> SPACE to jump • Click to jump • Avoid obstacles!</p>
-        </div>
-        
-        <!-- Simple Controls -->
-        <div class="controls">
-            <button class="btn primary" id="jumpBtn">🦘 Jump (Space)</button>
-            <button class="btn secondary" id="shareBtn">📤 Share Score</button>
-        </div>
-        
-        <!-- Loading Indicator -->
-        <div class="loading" id="loadingIndicator">
-            <div class="spinner"></div>
-            <p>Processing transaction...</p>
         </div>
         
         <!-- Instructions -->
         <div class="instructions">
-            <strong>🎮 How to Play:</strong><br>
-            <span class="emoji">🦘</span> <strong>Jump:</strong> Tap/Click or press SPACE to jump over obstacles<br>
-            <span class="emoji">🚀</span> <strong>Nitro:</strong> Swipe right or press SHIFT for speed boost<br>
-            <span class="emoji">🛡️</span> <strong>Shield:</strong> Collect shield power-ups to survive one hit<br>
-            <span class="emoji">⭐</span> <strong>Multi-Jump:</strong> Double jump power-up for tricky obstacles<br>
-            <span class="emoji">🎨</span> <strong>NFT Minting:</strong> Connect wallet and mint your achievements as NFTs!<br>
-            <span class="emoji">🎯</span> <strong>Goal:</strong> Get the highest score and mint exclusive NFTs!
+            <p><strong>Press SPACE or CLICK to jump over obstacles!</strong></p>
         </div>
     </div>
-    
-    <!-- Game Over Modal -->
-    <div id="gameOver" class="game-over">
-        <h2>🎮 Game Over!</h2>
-        <p>Final Score: <span id="finalScore">0</span></p>
-        <p>New High Score: <span id="newHighScore">0</span></p>
-        <div style="margin: 20px 0;">
-            <button class="btn primary" id="restartBtn2">🔄 Play Again</button>
-            <button class="btn nft" id="mintNftBtn2">🎨 Mint Achievement NFT</button>
-        </div>
-    </div>
-    
-    <!-- Farcaster Mini App SDK -->
-    <script type="module">
-        import { sdk } from 'https://esm.sh/@farcaster/miniapp-sdk'
-        
-        // Make SDK globally available
-        window.farcasterSDK = sdk;
-        
-        // Initialize the app following official documentation
-        async function initializeApp() {
-            try {
-                console.log('🚀 Initializing Farcaster Mini App...');
-                
-                // Wait for game to be ready
-                await waitForGameReady();
-                
-                // Try to authenticate user with Quick Auth (optional)
-                try {
-                    const { token } = await sdk.quickAuth.getToken();
-                    console.log('✅ Quick Auth successful, user authenticated');
-                    window.userToken = token;
-                    
-                    // Try to fetch user data using authenticated request
-                    try {
-                        const userResponse = await sdk.quickAuth.fetch('/api/user');
-                        if (userResponse.ok) {
-                            const userData = await userResponse.json();
-                            console.log('👤 User data:', userData);
-                            window.userData = userData;
-                        }
-                    } catch (fetchError) {
-                        console.log('⚠️ User data fetch failed (expected for demo):', fetchError.message);
-                    }
-                    
-                } catch (authError) {
-                    console.log('⚠️ Quick Auth failed, continuing without authentication:', authError.message);
-                    // Continue without auth - app should still work
-                }
-                
-                // Call ready() to hide splash screen - THIS IS CRITICAL
-                await sdk.actions.ready();
-                console.log('✅ App is ready! Splash screen should be hidden.');
-                
-            } catch (error) {
-                console.error('❌ SDK initialization failed:', error);
-                
-                // Fallback: Force hide splash screen after delay
-                setTimeout(() => {
-                    console.log('🔄 Attempting to force hide splash screen...');
-                    const splashSelectors = [
-                        '[data-testid="splash-screen"]',
-                        '.splash-screen',
-                        '#splash-screen',
-                        '[class*="splash"]',
-                        '[class*="loading"]',
-                        '.farcaster-splash'
-                    ];
-                    
-                    splashSelectors.forEach(selector => {
-                        const elements = document.querySelectorAll(selector);
-                        elements.forEach(el => {
-                            console.log(`Hiding element: ${selector}`);
-                            el.style.display = 'none';
-                            el.remove();
-                        });
-                    });
-                }, 2000);
-            }
-        }
-        
-        // Wait for game instance to be ready
-        function waitForGameReady() {
-            return new Promise((resolve) => {
-                let attempts = 0;
-                const maxAttempts = 50; // 5 seconds max wait
-                
-                const checkGame = () => {
-                    attempts++;
-                    
-                    if (window.gameInstance) {
-                        console.log('🎮 Game instance found, app is ready');
-                        resolve();
-                    } else if (attempts >= maxAttempts) {
-                        console.log('⏰ Timeout waiting for game, proceeding anyway...');
-                        resolve();
-                    } else {
-                        console.log(`⏳ Waiting for game to initialize... (${attempts}/${maxAttempts})`);
-                        setTimeout(checkGame, 100);
-                    }
-                };
-                
-                checkGame();
-            });
-        }
-        
-        // Initialize when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('📱 DOM loaded, starting initialization...');
-            initializeApp();
-        });
-        
-        // Additional fallback for splash screen
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                if (document.querySelector('[data-testid="splash-screen"]')) {
-                    console.log('🔄 Fallback: Force hiding splash screen on window load');
-                    const splashScreen = document.querySelector('[data-testid="splash-screen"]');
-                    if (splashScreen) {
-                        splashScreen.style.display = 'none';
-                        splashScreen.remove();
-                    }
-                }
-            }, 3000);
-        });
-        
-        // Developer Mode Debug Info
-        function logDeveloperInfo() {
-            console.log('🔧 Developer Mode Info:');
-            console.log('📱 Enable Developer Mode: https://farcaster.xyz/~/settings/developer-tools');
-            console.log('🎮 Current URL:', window.location.href);
-            console.log('🔑 SDK Available:', !!window.farcasterSDK);
-            console.log('🎯 Game Instance:', !!window.gameInstance);
-            console.log('👤 User Token:', !!window.userToken);
-            console.log('📊 User Data:', !!window.userData);
-        }
-        
-        // Log developer info after initialization
-        setTimeout(logDeveloperInfo, 1000);
-    </script>
     
     <script src="game.js"></script>
-    
-    <script>
-        // Wallet and game integration
-        let isWalletConnected = false;
-        let walletAddress = null;
-        
-        // Wallet connection functions
-        async function connectWallet() {
-            try {
-                if (typeof window.ethereum !== 'undefined') {
-                    const accounts = await window.ethereum.request({
-                        method: 'eth_requestAccounts'
-                    });
-                    
-                    if (accounts.length > 0) {
-                        walletAddress = accounts[0];
-                        isWalletConnected = true;
-                        updateWalletUI();
-                        console.log('Wallet connected:', walletAddress);
-                    }
-                } else {
-                    alert('Please install MetaMask or another Web3 wallet!');
-                }
-            } catch (error) {
-                console.error('Wallet connection failed:', error);
-                alert('Failed to connect wallet. Please try again.');
-            }
-        }
-        
-        function updateWalletUI() {
-            const walletStatus = document.getElementById('walletStatus');
-            const connectBtn = document.getElementById('connectWalletBtn');
-            
-            if (isWalletConnected) {
-                const shortAddress = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
-                walletStatus.textContent = shortAddress;
-                connectBtn.textContent = 'Disconnect';
-                connectBtn.onclick = disconnectWallet;
-            } else {
-                walletStatus.textContent = 'Not Connected';
-                connectBtn.textContent = 'Connect Wallet';
-                connectBtn.onclick = connectWallet;
-            }
-        }
-        
-        function disconnectWallet() {
-            isWalletConnected = false;
-            walletAddress = null;
-            updateWalletUI();
-            console.log('Wallet disconnected');
-        }
-        
-        // NFT Minting function
-        async function mintNFT(score, achievement) {
-            if (!isWalletConnected) {
-                alert('Please connect your wallet first!');
-                return;
-            }
-            
-            try {
-                showLoading(true);
-                
-                // Simulate NFT minting (replace with actual contract interaction)
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                // Update NFT count
-                const nftCount = document.getElementById('nftCount');
-                const currentCount = parseInt(nftCount.textContent);
-                nftCount.textContent = currentCount + 1;
-                
-                showLoading(false);
-                alert(`🎉 Successfully minted NFT for ${achievement}! Score: ${score}`);
-                
-            } catch (error) {
-                showLoading(false);
-                console.error('NFT minting failed:', error);
-                alert('Failed to mint NFT. Please try again.');
-            }
-        }
-        
-        function showLoading(show) {
-            const loading = document.getElementById('loadingIndicator');
-            loading.style.display = show ? 'block' : 'none';
-        }
-        
-        // Enhanced share function using Farcaster SDK
-        async function shareScore(score) {
-            const shareText = `🦕 I just scored ${score} points in DinoRun Pro! 🎮 Can you beat my score? Play the ultimate Web3 gaming experience! 🚀 #DinoRunPro #Web3Gaming #NFTs`;
-            const shareUrl = 'https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app';
-            
-            try {
-                // Try Farcaster SDK share first
-                if (window.farcasterSDK && window.farcasterSDK.actions && window.farcasterSDK.actions.share) {
-                    await window.farcasterSDK.actions.share({
-                        text: shareText,
-                        url: shareUrl
-                    });
-                    console.log('✅ Shared via Farcaster SDK');
-                    return;
-                }
-                
-                // Fallback to native share API
-                if (navigator.share) {
-                    await navigator.share({
-                        title: 'DinoRun Pro Score',
-                        text: shareText,
-                        url: shareUrl
-                    });
-                    console.log('✅ Shared via native share API');
-                    return;
-                }
-                
-                // Final fallback to clipboard
-                await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
-                alert('Score copied to clipboard! Share it on social media! 🚀');
-                console.log('✅ Copied to clipboard');
-                
-            } catch (error) {
-                console.error('❌ Share failed:', error);
-                // Ultimate fallback
-                try {
-                    await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
-                    alert('Score copied to clipboard! Share it on social media! 🚀');
-                } catch (clipError) {
-                    console.error('❌ Clipboard also failed:', clipError);
-                    alert('Unable to share. Please copy manually: ' + shareText);
-                }
-            }
-        }
-        
-        // Event listeners
-        document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
-        document.getElementById('mintNftBtn').addEventListener('click', () => {
-            if (window.gameInstance) {
-                const score = Math.floor(window.gameInstance.score / 10);
-                mintNFT(score, 'High Score Achievement');
-            }
-        });
-        document.getElementById('mintNftBtn2').addEventListener('click', () => {
-            if (window.gameInstance) {
-                const score = Math.floor(window.gameInstance.score / 10);
-                mintNFT(score, 'Game Completion');
-            }
-        });
-        document.getElementById('shareBtn').addEventListener('click', () => {
-            if (window.gameInstance) {
-                const score = Math.floor(window.gameInstance.score / 10);
-                shareScore(score);
-            }
-        });
-        
-        // Initialize when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(initializeFarcasterSDK, 100);
-        });
-        
-        // Make functions globally available
-        window.connectWallet = connectWallet;
-        window.mintNFT = mintNFT;
-        window.shareScore = shareScore;
-    </script>
 </body>
 </html>
