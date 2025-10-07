@@ -1,18 +1,14 @@
 {
-  "name": "dino-run-mini-app",
+  "name": "dino-run-pro",
   "version": "1.0.0",
-  "description": "DinoRun Mini App for Farcaster",
+  "description": "Simple and fun DinoRun game with pixel art style",
   "main": "index.html",
   "scripts": {
-    "dev": "vercel dev",
+    "dev": "python3 -m http.server 8000",
     "build": "echo 'Build complete'",
-    "deploy": "vercel --prod"
+    "deploy": "echo 'Ready for deployment'"
   },
-  "dependencies": {},
-  "devDependencies": {
-    "vercel": "^32.0.0"
-  },
-  "keywords": ["farcaster", "mini-app", "game", "dino", "base"],
+  "keywords": ["game", "dino", "runner", "pixel-art", "farcaster"],
   "author": "DinoRun Team",
   "license": "MIT"
 }
