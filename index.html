@@ -185,6 +185,11 @@
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
         
+        .canvas-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        
         #gameCanvas {
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
@@ -192,6 +197,37 @@
             height: auto;
             border: 3px solid rgba(255, 255, 255, 0.3);
             background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%);
+        }
+        
+        .game-start-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 10;
+            border: 2px solid #667eea;
+        }
+        
+        .game-start-message h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.5em;
+            color: #667eea;
+        }
+        
+        .game-start-message p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+        
+        .controls-hint {
+            font-size: 0.8em !important;
+            color: #aaa !important;
+            margin-top: 10px !important;
         }
         
         .controls {
@@ -448,7 +484,14 @@
         </div>
         
         <!-- Game Canvas -->
-        <canvas id="gameCanvas" width="900" height="400"></canvas>
+        <div class="canvas-wrapper">
+            <canvas id="gameCanvas" width="900" height="400"></canvas>
+            <div id="gameStartMessage" class="game-start-message">
+                <h2>🦕 DinoRun Pro</h2>
+                <p>Get Ready! Game starts automatically...</p>
+                <p class="controls-hint">Press SPACE to jump • Hold SHIFT for nitro</p>
+            </div>
+        </div>
         
         <!-- Power-ups Display -->
         <div class="power-ups">

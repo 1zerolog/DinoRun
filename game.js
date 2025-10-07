@@ -71,6 +71,11 @@ class DinoRunPro {
     this.dino.groundY = this.canvas.height - 120;
     this.dino.y = this.dino.groundY;
     
+    // Start the game automatically after a short delay
+    setTimeout(() => {
+      this.startGame();
+    }, 1000);
+    
     this.gameLoop();
   }
 
@@ -147,7 +152,7 @@ class DinoRunPro {
     
     jump() {
         if (!this.gameRunning) {
-            this.startGame();
+            // Don't start game on jump - game should start automatically
             return;
         }
         
@@ -231,11 +236,17 @@ class DinoRunPro {
     this.dino.jumpCount = 0;
     this.dino.maxJumps = 1;
     
+    // Hide start message
+    const startMessage = document.getElementById('gameStartMessage');
+    if (startMessage) {
+      startMessage.style.display = 'none';
+    }
+    
     this.gameOverElement.style.display = "none";
     this.updateScore();
     this.updatePowerUpUI();
     
-    console.log('Game started! Dino position:', this.dino.x, this.dino.y);
+    console.log('🎮 Game started! Dino position:', this.dino.x, this.dino.y);
   }
     
     restart() {
