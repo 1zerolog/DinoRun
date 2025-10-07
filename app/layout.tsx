@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   other: {
     "fc:miniapp": JSON.stringify({
       version: "1",
-      imageUrl: "https://snakegamezerolog.vercel.app/dino-hero.svg",
+      imageUrl: "https://dino-run-game-zeta.vercel.app/dino-hero.svg",
       button: { title: "Launch Dino", action: { name: "Launch Dino", type: "launch_miniapp" } }
     })
   },

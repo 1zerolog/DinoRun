@@ -1,7 +1,7 @@
 {
   "accountAssociation": {
     "header": "eyJmaWQiOjI4MjY1MSwidHlwZSI6ImF1dGgiLCJrZXkiOiIweDEzOGNGQ0QxZTVFMEFkZkM4ZUZmQzMxNzg3MmY4YWU5MjkxMjdGMjgifQ",
-    "payload": "eyJkb21haW4iOiJzbmFrZWdhbWV6ZXJvbG9nLnZlcmNlbC5hcHAifQ",
+    "payload": "eyJkb21haW4iOiJkaW5vLXJ1bi1nYW1lLXpldGEudmVyY2VsLmFwcCJ9",
     "signature": "xXZnF6VRNwGmCMDIkjMyfC2XZgenZy+51W7izBbPNxAkd0+4NGVFT9Xwx1qaAUv2c5KqRf640dddQr7WkfA+mxw="
   },
   "baseBuilder": {
@@ -14,16 +14,16 @@
     "description": "Dino runner in Farcaster - jump over obstacles, share your score, start the competition.",
     "primaryCategory": "games",
     "tags": ["game", "dino", "runner", "miniapp"],
-    "homeUrl": "https://snakegamezerolog.vercel.app",
-    "webhookUrl": "https://snakegamezerolog.vercel.app/api/webhook",
-    "iconUrl": "https://snakegamezerolog.vercel.app/dino-icon.svg",
-    "screenshotUrls": ["https://snakegamezerolog.vercel.app/dino-screenshot.svg"],
-    "splashImageUrl": "https://snakegamezerolog.vercel.app/dino-hero.svg",
+    "homeUrl": "https://dino-run-game-zeta.vercel.app",
+    "webhookUrl": "https://dino-run-game-zeta.vercel.app/api/webhook",
+    "iconUrl": "https://dino-run-game-zeta.vercel.app/dino-icon.svg",
+    "screenshotUrls": ["https://dino-run-game-zeta.vercel.app/dino-screenshot.svg"],
+    "splashImageUrl": "https://dino-run-game-zeta.vercel.app/dino-hero.svg",
     "splashBackgroundColor": "#87CEEB",
-    "heroImageUrl": "https://snakegamezerolog.vercel.app/dino-hero.svg",
+    "heroImageUrl": "https://dino-run-game-zeta.vercel.app/dino-hero.svg",
     "tagline": "Can you beat my high score? 🦕",
     "ogTitle": "Dino Runner - Jump & Survive",
     "ogDescription": "Jump over cacti, survive as long as possible, and mint your high scores as NFTs!",
-    "ogImageUrl": "https://snakegamezerolog.vercel.app/dino-hero.svg"
+    "ogImageUrl": "https://dino-run-game-zeta.vercel.app/dino-hero.svg"
   }
 }
