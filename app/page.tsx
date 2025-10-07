@@ -12,8 +12,8 @@ const GRID_WIDTH = 24
 const GRID_HEIGHT = 14
 const CELL = 20
 const INITIAL_SPEED = 100
-const GRAVITY = 2.0
-const JUMP_FORCE = -12
+const GRAVITY = 0.8
+const JUMP_FORCE = -16
 const NITRO_SPEED = 3
 const NITRO_DURATION = 100
 
@@ -259,23 +259,17 @@ function Game({ onShare, playerAddress }: { onShare: (score: number) => void; pl
     if (!gameStarted || gameOver) return
 
     const interval = setInterval(() => {
-      // Update dino physics
+      // Update dino physics - using game.js logic
       setDino((prevDino) => {
-        const newY = prevDino.y + dinoVelocity * 0.15
-        const newVelocity = dinoVelocity + GRAVITY * 0.15
+        const newVelocity = dinoVelocity + GRAVITY
+        const newY = prevDino.y + newVelocity
         
-        // Ground collision
-        if (newY >= GRID_HEIGHT - 3) {
+        // Ground collision - like game.js
+        const groundY = GRID_HEIGHT - 3
+        if (newY >= groundY) {
           setIsJumping(false)
           setDinoVelocity(0)
-          return { ...prevDino, y: GRID_HEIGHT - 3 }
-        }
-        
-        // Limit jump height
-        const maxJumpHeight = GRID_HEIGHT - 8
-        if (newY <= maxJumpHeight) {
-          setDinoVelocity(0) // Stop going up
-          return { ...prevDino, y: maxJumpHeight }
+          return { ...prevDino, y: groundY }
         }
         
         setDinoVelocity(newVelocity)
@@ -307,20 +301,24 @@ function Game({ onShare, playerAddress }: { onShare: (score: number) => void; pl
         return newObstacles
       })
 
-      // Check collisions - more sensitive
+      // Check collisions - using game.js collision logic
       obstacles.forEach(obstacle => {
-        const dx = Math.abs(dino.x - obstacle.point.x)
-        const dy = Math.abs(dino.y - obstacle.point.y)
+        const dinoX = dino.x * CELL
+        const dinoY = dino.y * CELL
+        const dinoWidth = CELL
+        const dinoHeight = CELL
         
-        // Different collision detection based on obstacle type
-        let collisionDistance = 0.6
-        if (obstacle.type === 'spike') {
-          collisionDistance = 0.4 // Spikes are more dangerous
-        } else if (obstacle.type === 'bomb') {
-          collisionDistance = 0.7 // Bombs are bigger
-        }
+        const obstacleX = obstacle.point.x * CELL
+        const obstacleY = obstacle.point.y * CELL
+        const obstacleWidth = CELL * obstacle.size
+        const obstacleHeight = CELL * obstacle.size
         
-        if (dx < collisionDistance && dy < collisionDistance) {
+        if (
+          dinoX < obstacleX + obstacleWidth &&
+          dinoX + dinoWidth > obstacleX &&
+          dinoY < obstacleY + obstacleHeight &&
+          dinoY + dinoHeight > obstacleY
+        ) {
           setGameOver(true)
           if (score >= 30) {
             setShowNFTPrompt(true)
