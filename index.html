@@ -23,6 +23,9 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Fredoka+One:wght@400&display=swap" rel="stylesheet">
     
+    <!-- Preconnect to Quick Auth Server for performance -->
+    <link rel="preconnect" href="https://auth.farcaster.xyz">
+    
     <style>
         * {
             margin: 0;
@@ -479,52 +482,99 @@
         // Make SDK globally available
         window.farcasterSDK = sdk;
         
-        // Initialize the app
+        // Initialize the app following official documentation
         async function initializeApp() {
             try {
-                console.log('Initializing Farcaster Mini App...');
+                console.log('🚀 Initializing Farcaster Mini App...');
                 
                 // Wait for game to be ready
                 await waitForGameReady();
                 
-                // Call ready() to hide splash screen
+                // Try to authenticate user with Quick Auth (optional)
+                try {
+                    const { token } = await sdk.quickAuth.getToken();
+                    console.log('✅ Quick Auth successful, user authenticated');
+                    window.userToken = token;
+                } catch (authError) {
+                    console.log('⚠️ Quick Auth failed, continuing without authentication:', authError.message);
+                    // Continue without auth - app should still work
+                }
+                
+                // Call ready() to hide splash screen - THIS IS CRITICAL
                 await sdk.actions.ready();
                 console.log('✅ App is ready! Splash screen should be hidden.');
                 
             } catch (error) {
-                console.log('❌ SDK initialization failed:', error);
-                // Force hide splash screen on error
+                console.error('❌ SDK initialization failed:', error);
+                
+                // Fallback: Force hide splash screen after delay
                 setTimeout(() => {
-                    const splashScreen = document.querySelector('[data-testid="splash-screen"]') || 
-                                       document.querySelector('.splash-screen') ||
-                                       document.querySelector('#splash-screen') ||
-                                       document.querySelector('[class*="splash"]');
-                    if (splashScreen) {
-                        splashScreen.style.display = 'none';
-                        splashScreen.remove();
-                    }
-                }, 500);
+                    console.log('🔄 Attempting to force hide splash screen...');
+                    const splashSelectors = [
+                        '[data-testid="splash-screen"]',
+                        '.splash-screen',
+                        '#splash-screen',
+                        '[class*="splash"]',
+                        '[class*="loading"]',
+                        '.farcaster-splash'
+                    ];
+                    
+                    splashSelectors.forEach(selector => {
+                        const elements = document.querySelectorAll(selector);
+                        elements.forEach(el => {
+                            console.log(`Hiding element: ${selector}`);
+                            el.style.display = 'none';
+                            el.remove();
+                        });
+                    });
+                }, 2000);
             }
         }
         
         // Wait for game instance to be ready
         function waitForGameReady() {
             return new Promise((resolve) => {
+                let attempts = 0;
+                const maxAttempts = 50; // 5 seconds max wait
+                
                 const checkGame = () => {
+                    attempts++;
+                    
                     if (window.gameInstance) {
                         console.log('🎮 Game instance found, app is ready');
                         resolve();
+                    } else if (attempts >= maxAttempts) {
+                        console.log('⏰ Timeout waiting for game, proceeding anyway...');
+                        resolve();
                     } else {
-                        console.log('⏳ Waiting for game to initialize...');
+                        console.log(`⏳ Waiting for game to initialize... (${attempts}/${maxAttempts})`);
                         setTimeout(checkGame, 100);
                     }
                 };
+                
                 checkGame();
             });
         }
         
         // Initialize when DOM is loaded
-        document.addEventListener('DOMContentLoaded', initializeApp);
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('📱 DOM loaded, starting initialization...');
+            initializeApp();
+        });
+        
+        // Additional fallback for splash screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                if (document.querySelector('[data-testid="splash-screen"]')) {
+                    console.log('🔄 Fallback: Force hiding splash screen on window load');
+                    const splashScreen = document.querySelector('[data-testid="splash-screen"]');
+                    if (splashScreen) {
+                        splashScreen.style.display = 'none';
+                        splashScreen.remove();
+                    }
+                }
+            }, 3000);
+        });
     </script>
     
     <script src="game.js"></script>
@@ -613,24 +663,48 @@
             loading.style.display = show ? 'block' : 'none';
         }
         
-        // Enhanced share function
-        function shareScore(score) {
+        // Enhanced share function using Farcaster SDK
+        async function shareScore(score) {
             const shareText = `🦕 I just scored ${score} points in DinoRun Pro! 🎮 Can you beat my score? Play the ultimate Web3 gaming experience! 🚀 #DinoRunPro #Web3Gaming #NFTs`;
+            const shareUrl = 'https://dino-run-mini-2ntfbwds8-zerologs-projects.vercel.app';
             
-            if (window.farcasterSDK && window.farcasterSDK.actions && window.farcasterSDK.actions.share) {
-                window.farcasterSDK.actions.share({
-                    text: shareText,
-                    url: 'https://dino-run-mini-my4doq054-zerologs-projects.vercel.app'
-                });
-            } else if (navigator.share) {
-                navigator.share({
-                    title: 'DinoRun Pro Score',
-                    text: shareText,
-                    url: 'https://dino-run-mini-my4doq054-zerologs-projects.vercel.app'
-                });
-            } else {
-                navigator.clipboard.writeText(`${shareText}\nhttps://dino-run-mini-my4doq054-zerologs-projects.vercel.app`);
+            try {
+                // Try Farcaster SDK share first
+                if (window.farcasterSDK && window.farcasterSDK.actions && window.farcasterSDK.actions.share) {
+                    await window.farcasterSDK.actions.share({
+                        text: shareText,
+                        url: shareUrl
+                    });
+                    console.log('✅ Shared via Farcaster SDK');
+                    return;
+                }
+                
+                // Fallback to native share API
+                if (navigator.share) {
+                    await navigator.share({
+                        title: 'DinoRun Pro Score',
+                        text: shareText,
+                        url: shareUrl
+                    });
+                    console.log('✅ Shared via native share API');
+                    return;
+                }
+                
+                // Final fallback to clipboard
+                await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
                 alert('Score copied to clipboard! Share it on social media! 🚀');
+                console.log('✅ Copied to clipboard');
+                
+            } catch (error) {
+                console.error('❌ Share failed:', error);
+                // Ultimate fallback
+                try {
+                    await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+                    alert('Score copied to clipboard! Share it on social media! 🚀');
+                } catch (clipError) {
+                    console.error('❌ Clipboard also failed:', clipError);
+                    alert('Unable to share. Please copy manually: ' + shareText);
+                }
             }
         }
         
