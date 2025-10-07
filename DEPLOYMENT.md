@@ -17,8 +17,8 @@ foundryup
 ### 1. Initialize Foundry Project
 
 \`\`\`bash
-forge init snake-nft-contract
-cd snake-nft-contract
+forge init dino-nft-contract
+cd dino-nft-contract
 \`\`\`
 
 ### 2. Install OpenZeppelin Contracts
@@ -29,7 +29,7 @@ forge install OpenZeppelin/openzeppelin-contracts
 
 ### 3. Copy Contract
 
-Copy the `contracts/SnakeGameNFT.sol` file to `src/SnakeGameNFT.sol`
+Copy the `contracts/DinoGameNFT.sol` file to `src/DinoGameNFT.sol`
 
 ### 4. Configure Foundry
 
@@ -58,7 +58,7 @@ export PRIVATE_KEY=your_private_key_here
 # Deploy to Base Mainnet
 forge create --rpc-url base_mainnet \
   --private-key $PRIVATE_KEY \
-  src/SnakeGameNFT.sol:SnakeGameNFT
+  src/DinoGameNFT.sol:DinoGameNFT
 \`\`\`
 
 **Note**: The contract owner is automatically set to `0xe1bf2Dd72A8A026bEb20d8bF75276DF260507eFc` in the constructor.
@@ -68,7 +68,7 @@ forge create --rpc-url base_mainnet \
 After deployment, copy the contract address and update it in `lib/contract.ts`:
 
 \`\`\`typescript
-export const SNAKE_NFT_CONTRACT = {
+export const DINO_NFT_CONTRACT = {
   address: "0xYourDeployedContractAddress", // Replace this
   // ... rest of config
 }
@@ -81,7 +81,7 @@ forge verify-contract \
   --chain-id 8453 \
   --compiler-version v0.8.20 \
   YOUR_CONTRACT_ADDRESS \
-  src/SnakeGameNFT.sol:SnakeGameNFT \
+  src/DinoGameNFT.sol:DinoGameNFT \
   --etherscan-api-key YOUR_BASESCAN_API_KEY
 \`\`\`
 

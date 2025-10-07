@@ -1,6 +1,6 @@
 // Contract configuration
-export const SNAKE_NFT_CONTRACT = {
-  // TODO: Deploy the contract using the Solidity file in contracts/SnakeGameNFT.sol
+export const DINO_NFT_CONTRACT = {
+  // TODO: Deploy the contract using the Solidity file in contracts/DinoGameNFT.sol
   // Deploy to Base Mainnet (Chain ID: 8453)
   // Owner will be set to: 0xe1bf2Dd72A8A026bEb20d8bF75276DF260507eFc
   // Then replace this address with your deployed contract address
@@ -38,7 +38,7 @@ export const SNAKE_NFT_CONTRACT = {
             { internalType: "uint256", name: "score", type: "uint256" },
             { internalType: "uint256", name: "timestamp", type: "uint256" },
           ],
-          internalType: "struct SnakeGameNFT.GameScore",
+          internalType: "struct DinoGameNFT.GameScore",
           name: "",
           type: "tuple",
         },

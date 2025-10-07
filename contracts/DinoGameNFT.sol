@@ -4,7 +4,7 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract SnakeGameNFT is ERC721, Ownable {
+contract DinoGameNFT is ERC721, Ownable {
     uint256 private _tokenIdCounter;
     
     struct GameScore {
@@ -17,7 +17,7 @@ contract SnakeGameNFT is ERC721, Ownable {
     
     event ScoreMinted(address indexed player, uint256 indexed tokenId, uint256 score);
     
-    constructor() ERC721("Snake Game Score", "SNAKE") Ownable(0xe1bf2Dd72A8A026bEb20d8bF75276DF260507eFc) {
+    constructor() ERC721("Dino Game Score", "DINO") Ownable(0xe1bf2Dd72A8A026bEb20d8bF75276DF260507eFc) {
         _tokenIdCounter = 0;
     }
     
@@ -52,9 +52,9 @@ contract SnakeGameNFT is ERC721, Ownable {
         
         // Simple on-chain metadata
         string memory json = string(abi.encodePacked(
-            '{"name": "Snake Game Score #',
+            '{"name": "Dino Game Score #',
             _toString(tokenId),
-            '", "description": "A memorable Snake Game score of ',
+            '", "description": "A memorable Dino Game score of ',
             _toString(gameScore.score),
             ' points", "attributes": [{"trait_type": "Score", "value": ',
             _toString(gameScore.score),

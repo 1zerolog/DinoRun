@@ -1,7 +1,7 @@
 {
-  "name": "Snake Game",
-  "short_name": "Snake",
-  "description": "Classic snake game with modern graphics",
+  "name": "Dino Game",
+  "short_name": "Dino",
+  "description": "Classic dino running game with modern graphics",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#667eea",

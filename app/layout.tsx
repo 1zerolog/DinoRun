@@ -11,20 +11,20 @@ export const metadata: Metadata = {
     "fc:miniapp": JSON.stringify({
       version: "1",
       imageUrl: "https://snakegamezerolog.vercel.app/snake-hero.png",
-      button: { title: "Launch Snake", action: { name: "Launch Snake", type: "launch_miniapp" } }
+      button: { title: "Launch Dino", action: { name: "Launch Dino", type: "launch_miniapp" } }
     })
   },
-  title: "Snake Game - Fast and Classic Snake",
-  description: "Smooth, touch-enabled classic snake game in your browser.",
+  title: "Dino Game - Fast and Classic Dino",
+  description: "Smooth, touch-enabled classic dino running game in your browser.",
   openGraph: {
-    title: "Snake Game",
+    title: "Dino Game",
     description: "A fast mini game discoverable on Base.",
     images: [
       {
         url: "/snake-hero.png",
         width: 1200,
         height: 630,
-        alt: "Snake Game",
+        alt: "Dino Game",
       },
     ],
   },
