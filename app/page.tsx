@@ -8,12 +8,14 @@ import { DINO_NFT_CONTRACT } from "@/lib/contract"
 type Point = { x: number; y: number }
 type Dir = "up" | "down" | "left" | "right"
 
-const GRID_WIDTH = 20
-const GRID_HEIGHT = 12
-const CELL = 25
-const INITIAL_SPEED = 120
-const GRAVITY = 0.8
-const JUMP_FORCE = -12
+const GRID_WIDTH = 24
+const GRID_HEIGHT = 14
+const CELL = 20
+const INITIAL_SPEED = 100
+const GRAVITY = 0.6
+const JUMP_FORCE = -10
+const NITRO_SPEED = 3
+const NITRO_DURATION = 100
 
 export default function Page() {
   const [isConnected, setIsConnected] = useState(false)
@@ -128,9 +130,9 @@ function Gate({ onConnect }: { onConnect: () => void }) {
 
 function Game({ onShare, playerAddress }: { onShare: (score: number) => void; playerAddress?: string }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const [dino, setDino] = useState<Point>({ x: 3, y: 8 })
+  const [dino, setDino] = useState<Point>({ x: 3, y: GRID_HEIGHT - 3 })
   const [dinoVelocity, setDinoVelocity] = useState(0)
-  const [obstacles, setObstacles] = useState<Point[]>([])
+  const [obstacles, setObstacles] = useState<{point: Point, type: string, size: number}[]>([])
   const [gameStarted, setGameStarted] = useState(false)
   const [gameOver, setGameOver] = useState(false)
   const [score, setScore] = useState(0)
@@ -141,11 +143,22 @@ function Game({ onShare, playerAddress }: { onShare: (score: number) => void; pl
   const [mintStatus, setMintStatus] = useState<string>("")
   const [txHash, setTxHash] = useState<string>("")
   const [isJumping, setIsJumping] = useState(false)
+  const [nitroActive, setNitroActive] = useState(false)
+  const [nitroTime, setNitroTime] = useState(0)
+  const [gameSpeed, setGameSpeed] = useState(1)
 
   const generateObstacle = () => {
+    const types = ['poop', 'rock', 'banana', 'spike', 'bomb']
+    const type = types[Math.floor(Math.random() * types.length)]
+    const size = type === 'poop' ? 0.8 : type === 'bomb' ? 1.2 : 1
+    
     return {
-      x: GRID_WIDTH - 1,
-      y: GRID_HEIGHT - 2, // Ground level
+      point: {
+        x: GRID_WIDTH - 1,
+        y: type === 'spike' ? GRID_HEIGHT - 1 : GRID_HEIGHT - 2
+      },
+      type,
+      size
     }
   }
 
@@ -153,13 +166,35 @@ function Game({ onShare, playerAddress }: { onShare: (score: number) => void; pl
     const handleKey = (e: KeyboardEvent) => {
       if (!gameStarted || gameOver) return
       const key = e.key
+      
+      // Jump with up arrow or space
       if ((key === " " || key === "ArrowUp" || key === "w") && !isJumping) {
         setIsJumping(true)
         setDinoVelocity(JUMP_FORCE)
       }
+      
+      // Nitro with right arrow
+      if (key === "ArrowRight" || key === "d") {
+        setNitroActive(true)
+        setNitroTime(NITRO_DURATION)
+        setGameSpeed(NITRO_SPEED)
+      }
     }
+    
+    const handleKeyUp = (e: KeyboardEvent) => {
+      const key = e.key
+      if (key === "ArrowRight" || key === "d") {
+        setNitroActive(false)
+        setGameSpeed(1)
+      }
+    }
+    
     window.addEventListener("keydown", handleKey)
-    return () => window.removeEventListener("keydown", handleKey)
+    window.addEventListener("keyup", handleKeyUp)
+    return () => {
+      window.removeEventListener("keydown", handleKey)
+      window.removeEventListener("keyup", handleKeyUp)
+    }
   }, [gameStarted, gameOver, isJumping])
 
   useEffect(() => {
@@ -182,10 +217,17 @@ function Game({ onShare, playerAddress }: { onShare: (score: number) => void; pl
       const dx = touchEndX - touchStartX
       const dy = touchEndY - touchStartY
 
-      // Any significant touch movement triggers jump
-      if ((Math.abs(dx) > 30 || Math.abs(dy) > 30) && !isJumping) {
+      // Jump if swipe up or tap
+      if ((dy < -30 || (Math.abs(dx) < 20 && Math.abs(dy) < 20)) && !isJumping) {
         setIsJumping(true)
         setDinoVelocity(JUMP_FORCE)
+      }
+      
+      // Nitro if swipe right
+      if (dx > 50) {
+        setNitroActive(true)
+        setNitroTime(NITRO_DURATION)
+        setGameSpeed(NITRO_SPEED)
       }
     }
 
@@ -207,24 +249,35 @@ function Game({ onShare, playerAddress }: { onShare: (score: number) => void; pl
         const newVelocity = dinoVelocity + GRAVITY * 0.1
         
         // Ground collision
-        if (newY >= GRID_HEIGHT - 2) {
+        if (newY >= GRID_HEIGHT - 3) {
           setIsJumping(false)
           setDinoVelocity(0)
-          return { ...prevDino, y: GRID_HEIGHT - 2 }
+          return { ...prevDino, y: GRID_HEIGHT - 3 }
         }
         
         setDinoVelocity(newVelocity)
         return { ...prevDino, y: newY }
       })
 
+      // Update nitro
+      if (nitroActive && nitroTime > 0) {
+        setNitroTime(prev => prev - 1)
+      } else {
+        setNitroActive(false)
+        setGameSpeed(1)
+      }
+
       // Move obstacles
       setObstacles((prevObstacles) => {
         const newObstacles = prevObstacles
-          .map(obs => ({ ...obs, x: obs.x - 0.1 }))
-          .filter(obs => obs.x > -1) // Remove obstacles that are off screen
+          .map(obs => ({ 
+            ...obs, 
+            point: { ...obs.point, x: obs.point.x - 0.15 * gameSpeed }
+          }))
+          .filter(obs => obs.point.x > -2) // Remove obstacles that are off screen
 
-        // Add new obstacles randomly
-        if (Math.random() < 0.02) { // 2% chance each frame
+        // Add new obstacles more frequently
+        if (Math.random() < 0.03 * gameSpeed) {
           newObstacles.push(generateObstacle())
         }
 
@@ -233,7 +286,10 @@ function Game({ onShare, playerAddress }: { onShare: (score: number) => void; pl
 
       // Check collisions
       obstacles.forEach(obstacle => {
-        if (Math.abs(dino.x - obstacle.x) < 1 && Math.abs(dino.y - obstacle.y) < 1) {
+        const dx = Math.abs(dino.x - obstacle.point.x)
+        const dy = Math.abs(dino.y - obstacle.point.y)
+        
+        if (dx < 0.8 && dy < 0.8) {
           setGameOver(true)
           if (score >= 30) {
             setShowNFTPrompt(true)
@@ -243,13 +299,13 @@ function Game({ onShare, playerAddress }: { onShare: (score: number) => void; pl
       })
 
       // Increase score over time
-      setScore(prev => prev + 1)
-      setSpeed(prev => Math.max(50, prev - 0.5)) // Gradually increase speed
+      setScore(prev => prev + gameSpeed)
+      setSpeed(prev => Math.max(40, prev - 0.3)) // Gradually increase speed
 
     }, speed)
 
     return () => clearInterval(interval)
-  }, [gameStarted, gameOver, dinoVelocity, dino, obstacles, speed, score, highScore])
+  }, [gameStarted, gameOver, dinoVelocity, dino, obstacles, speed, score, highScore, nitroActive, nitroTime, gameSpeed])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -260,74 +316,148 @@ function Game({ onShare, playerAddress }: { onShare: (score: number) => void; pl
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-    // Sky gradient background
+    // 3D Sky gradient background
     const bgGradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
-    bgGradient.addColorStop(0, "#87CEEB") // Sky blue
+    bgGradient.addColorStop(0, "#FFE4B5") // Light orange
+    bgGradient.addColorStop(0.3, "#87CEEB") // Sky blue
     bgGradient.addColorStop(1, "#98FB98") // Light green
     ctx.fillStyle = bgGradient
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-    // Draw ground
-    ctx.fillStyle = "#8B4513"
-    ctx.fillRect(0, (GRID_HEIGHT - 1) * CELL, canvas.width, CELL)
+    // Draw 3D ground with perspective
+    const groundY = (GRID_HEIGHT - 1) * CELL
+    const groundGradient = ctx.createLinearGradient(0, groundY, 0, canvas.height)
+    groundGradient.addColorStop(0, "#8B4513")
+    groundGradient.addColorStop(1, "#654321")
+    ctx.fillStyle = groundGradient
+    ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY)
 
-    // Draw dino
+    // Draw 3D road lines
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.3)"
+    ctx.lineWidth = 2
+    for (let i = 0; i < 3; i++) {
+      const y = groundY + 15 + i * 20
+      ctx.beginPath()
+      ctx.moveTo(0, y)
+      ctx.lineTo(canvas.width, y)
+      ctx.stroke()
+    }
+
+    // Draw dino with 3D effect
     const dinoX = dino.x * CELL
     const dinoY = dino.y * CELL
     
-    // Dino body
+    // Dino shadow
+    ctx.fillStyle = "rgba(0, 0, 0, 0.2)"
+    ctx.fillRect(dinoX + 3, groundY + 2, CELL - 4, 5)
+    
+    // Dino body with 3D gradient
     const dinoGrad = ctx.createLinearGradient(dinoX, dinoY, dinoX + CELL, dinoY + CELL)
-    dinoGrad.addColorStop(0, "#228B22") // Forest green
+    dinoGrad.addColorStop(0, "#32CD32") // Lime green
+    dinoGrad.addColorStop(0.5, "#228B22") // Forest green
     dinoGrad.addColorStop(1, "#006400") // Dark green
     ctx.fillStyle = dinoGrad
-    ctx.shadowColor = "rgba(34, 139, 34, 0.5)"
-    ctx.shadowBlur = 10
-    ctx.fillRect(dinoX + 2, dinoY + 2, CELL - 4, CELL - 4)
+    ctx.shadowColor = "rgba(34, 139, 34, 0.6)"
+    ctx.shadowBlur = 8
+    ctx.fillRect(dinoX + 1, dinoY + 1, CELL - 2, CELL - 2)
     ctx.shadowBlur = 0
 
     // Dino eye
     ctx.fillStyle = "#fff"
     ctx.beginPath()
-    ctx.arc(dinoX + CELL * 0.7, dinoY + CELL * 0.3, 3, 0, Math.PI * 2)
+    ctx.arc(dinoX + CELL * 0.7, dinoY + CELL * 0.3, 4, 0, Math.PI * 2)
     ctx.fill()
     ctx.fillStyle = "#000"
     ctx.beginPath()
-    ctx.arc(dinoX + CELL * 0.7, dinoY + CELL * 0.3, 1.5, 0, Math.PI * 2)
+    ctx.arc(dinoX + CELL * 0.7, dinoY + CELL * 0.3, 2, 0, Math.PI * 2)
     ctx.fill()
 
-    // Draw obstacles
-    obstacles.forEach(obstacle => {
-      const obsX = obstacle.x * CELL
-      const obsY = obstacle.y * CELL
+    // Nitro effect
+    if (nitroActive) {
+      ctx.fillStyle = "rgba(255, 100, 100, 0.3)"
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
       
-      // Cactus-like obstacle
-      const obsGrad = ctx.createLinearGradient(obsX, obsY, obsX + CELL, obsY + CELL)
-      obsGrad.addColorStop(0, "#654321")
-      obsGrad.addColorStop(1, "#8B4513")
-      ctx.fillStyle = obsGrad
-      ctx.shadowColor = "rgba(139, 69, 19, 0.5)"
-      ctx.shadowBlur = 8
-      ctx.fillRect(obsX + 4, obsY - CELL + 4, CELL - 8, CELL * 2 - 8)
-      ctx.shadowBlur = 0
+      // Speed lines
+      for (let i = 0; i < 20; i++) {
+        const x = Math.random() * canvas.width
+        const y = Math.random() * canvas.height
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.5)"
+        ctx.lineWidth = 2
+        ctx.beginPath()
+        ctx.moveTo(x, y)
+        ctx.lineTo(x - 30, y)
+        ctx.stroke()
+      }
+    }
+
+    // Draw obstacles with 3D effect
+    obstacles.forEach(obstacle => {
+      const obsX = obstacle.point.x * CELL
+      const obsY = obstacle.point.y * CELL
+      
+      // Obstacle shadow
+      ctx.fillStyle = "rgba(0, 0, 0, 0.3)"
+      ctx.fillRect(obsX + 2, groundY + 2, CELL * obstacle.size - 4, 8)
+      
+      if (obstacle.type === 'poop') {
+        // Draw poop emoji
+        ctx.fillStyle = "#8B4513"
+        ctx.beginPath()
+        ctx.arc(obsX + CELL/2, obsY - CELL/2, CELL/2 * obstacle.size, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.fillStyle = "#654321"
+        ctx.beginPath()
+        ctx.arc(obsX + CELL/2 + 5, obsY - CELL/2 - 5, 3, 0, Math.PI * 2)
+        ctx.fill()
+      } else if (obstacle.type === 'rock') {
+        // Draw rock
+        ctx.fillStyle = "#696969"
+        ctx.fillRect(obsX + 2, obsY - CELL + 2, CELL * obstacle.size - 4, CELL * obstacle.size - 4)
+      } else if (obstacle.type === 'banana') {
+        // Draw banana
+        ctx.fillStyle = "#FFD700"
+        ctx.beginPath()
+        ctx.arc(obsX + CELL/2, obsY - CELL/2, CELL/2 * obstacle.size, 0.5, Math.PI * 1.5)
+        ctx.strokeStyle = "#FFD700"
+        ctx.lineWidth = 8
+        ctx.stroke()
+      } else if (obstacle.type === 'spike') {
+        // Draw spike
+        ctx.fillStyle = "#C0C0C0"
+        ctx.beginPath()
+        ctx.moveTo(obsX + CELL/2, obsY - CELL)
+        ctx.lineTo(obsX, obsY)
+        ctx.lineTo(obsX + CELL, obsY)
+        ctx.closePath()
+        ctx.fill()
+      } else if (obstacle.type === 'bomb') {
+        // Draw bomb
+        ctx.fillStyle = "#2F4F4F"
+        ctx.beginPath()
+        ctx.arc(obsX + CELL/2, obsY - CELL/2, CELL/2 * obstacle.size, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.fillStyle = "#FF0000"
+        ctx.fillRect(obsX + CELL/2 - 2, obsY - CELL/2 - 8, 4, 6)
+      }
     })
 
-    // Draw clouds
-    for (let i = 0; i < 3; i++) {
-      const cloudX = (i * 200 + Date.now() * 0.01) % (canvas.width + 100) - 50
-      const cloudY = 50 + i * 30
+    // Draw animated clouds
+    for (let i = 0; i < 4; i++) {
+      const cloudX = (i * 150 + Date.now() * 0.005) % (canvas.width + 80) - 40
+      const cloudY = 30 + i * 25
       
-      ctx.fillStyle = "rgba(255, 255, 255, 0.8)"
+      ctx.fillStyle = "rgba(255, 255, 255, 0.9)"
       ctx.beginPath()
-      ctx.arc(cloudX, cloudY, 20, 0, Math.PI * 2)
-      ctx.arc(cloudX + 25, cloudY, 25, 0, Math.PI * 2)
-      ctx.arc(cloudX + 50, cloudY, 20, 0, Math.PI * 2)
-      ctx.arc(cloudX + 25, cloudY - 15, 15, 0, Math.PI * 2)
+      ctx.arc(cloudX, cloudY, 15, 0, Math.PI * 2)
+      ctx.arc(cloudX + 20, cloudY, 20, 0, Math.PI * 2)
+      ctx.arc(cloudX + 40, cloudY, 15, 0, Math.PI * 2)
+      ctx.arc(cloudX + 20, cloudY - 12, 12, 0, Math.PI * 2)
       ctx.fill()
     }
-  }, [dino, obstacles])
+  }, [dino, obstacles, nitroActive])
 
   const startGame = () => {
-    setDino({ x: 3, y: GRID_HEIGHT - 2 })
+    setDino({ x: 3, y: GRID_HEIGHT - 3 })
     setDinoVelocity(0)
     setObstacles([])
     setIsJumping(false)
@@ -338,6 +468,9 @@ function Game({ onShare, playerAddress }: { onShare: (score: number) => void; pl
     setShowNFTPrompt(false)
     setMintStatus("")
     setTxHash("")
+    setNitroActive(false)
+    setNitroTime(0)
+    setGameSpeed(1)
   }
 
   const handleJump = () => {
@@ -446,7 +579,7 @@ function Game({ onShare, playerAddress }: { onShare: (score: number) => void; pl
     <section className="flex flex-col gap-4 items-center p-4 bg-card/50 backdrop-blur-xl rounded-3xl shadow-2xl max-w-full w-fit border border-border/50">
       <header className="text-center w-full">
         <h1 className="text-4xl font-black text-foreground">🦕 Dino</h1>
-        <div className="flex gap-8 justify-center mt-3">
+        <div className="flex gap-6 justify-center mt-3">
           <div>
             <div className="text-sm text-muted-foreground">Score</div>
             <div className="text-3xl font-bold text-primary">{score}</div>
@@ -455,6 +588,12 @@ function Game({ onShare, playerAddress }: { onShare: (score: number) => void; pl
             <div className="text-sm text-muted-foreground">Best</div>
             <div className="text-3xl font-bold text-accent">{highScore}</div>
           </div>
+          {nitroActive && (
+            <div>
+              <div className="text-sm text-muted-foreground">🚀 Nitro!</div>
+              <div className="text-2xl font-bold text-orange-500">{nitroTime}</div>
+            </div>
+          )}
         </div>
         {playerAddress && (
           <div className="text-xs text-muted-foreground mt-2">
@@ -473,7 +612,7 @@ function Game({ onShare, playerAddress }: { onShare: (score: number) => void; pl
       {!gameStarted && !gameOver && (
         <div className="text-center p-6 bg-muted/50 backdrop-blur-md rounded-2xl">
           <p className="text-lg mb-2 text-foreground">Ready to play?</p>
-          <p className="text-sm text-muted-foreground">Press Space, Up Arrow, or swipe to jump over obstacles!</p>
+          <p className="text-sm text-muted-foreground">↑ Jump • → Nitro Boost • Swipe up/down for mobile</p>
         </div>
       )}
 
@@ -542,12 +681,10 @@ function Game({ onShare, playerAddress }: { onShare: (score: number) => void; pl
       </div>
 
       <div className="flex justify-center p-4 bg-muted/30 backdrop-blur-sm rounded-2xl">
-        <button
-          onClick={handleJump}
-          className="w-24 h-24 rounded-xl bg-gradient-to-br from-primary to-accent text-primary-foreground text-4xl transition-all duration-200 active:scale-90 shadow-md hover:shadow-lg flex items-center justify-center"
-        >
-          🦘
-        </button>
+        <div className="text-center">
+          <div className="text-2xl mb-2">🎮</div>
+          <div className="text-sm text-muted-foreground">Use keyboard or touch controls</div>
+        </div>
       </div>
     </section>
   )
