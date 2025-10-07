@@ -1,15 +1,15 @@
 {
   "frame": {
-    "name": "Dino Run",
+    "name": "Dino Run Pro",
     "version": "1",
-    "iconUrl": "https://dino-run-mini-rcn992u4q-zerologs-projects.vercel.app/snake-icon.png",
-    "homeUrl": "https://dino-run-mini-rcn992u4q-zerologs-projects.vercel.app",
-    "imageUrl": "https://dino-run-mini-rcn992u4q-zerologs-projects.vercel.app/screenshot-portrait.png",
-    "splashImageUrl": "https://dino-run-mini-rcn992u4q-zerologs-projects.vercel.app/snake-hero.png",
+    "iconUrl": "https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app/snake-icon.png",
+    "homeUrl": "https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app",
+    "imageUrl": "https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app/screenshot-portrait.png",
+    "splashImageUrl": "https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app/snake-hero.png",
     "splashBackgroundColor": "#667eea",
-    "webhookUrl": "https://dino-run-mini-rcn992u4q-zerologs-projects.vercel.app/api/webhook",
-    "subtitle": "Endless Runner Game",
-    "description": "Play DinoRun - an exciting endless runner game where you control a dinosaur jumping over obstacles. Try to get the highest score and share it with friends on Farcaster!",
+    "webhookUrl": "https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app/api/webhook",
+    "subtitle": "Web3 Gaming Experience",
+    "description": "Play DinoRun Pro - the ultimate Web3 gaming experience with NFT minting, wallet connectivity, and endless runner gameplay! Jump, collect power-ups, and compete for high scores!",
     "primaryCategory": "games"
   },
   "accountAssociation": {

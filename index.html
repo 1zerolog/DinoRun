@@ -8,17 +8,43 @@
     
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://dino-run-mini-lqbi2vr9e-zerologs-projects.vercel.app">
+    <meta property="og:url" content="https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app">
     <meta property="og:title" content="🦕 DinoRun Pro - Web3 Gaming Experience">
     <meta property="og:description" content="Play the ultimate DinoRun experience with Web3 integration, NFT minting, and wallet connectivity!">
-    <meta property="og:image" content="https://dino-run-mini-lqbi2vr9e-zerologs-projects.vercel.app/screenshot-portrait.png">
+    <meta property="og:image" content="https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app/screenshot-portrait.png">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://dino-run-mini-lqbi2vr9e-zerologs-projects.vercel.app">
+    <meta property="twitter:url" content="https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app">
     <meta property="twitter:title" content="🦕 DinoRun Pro - Web3 Gaming Experience">
     <meta property="twitter:description" content="Play the ultimate DinoRun experience with Web3 integration, NFT minting, and wallet connectivity!">
-    <meta property="twitter:image" content="https://dino-run-mini-lqbi2vr9e-zerologs-projects.vercel.app/screenshot-portrait.png">
+    <meta property="twitter:image" content="https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app/screenshot-portrait.png">
+    
+    <!-- Farcaster Mini App Embed (CRITICAL for feed discovery) -->
+    <meta property="fc:miniapp" content='{
+        "version": "1",
+        "imageUrl": "https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app/screenshot-portrait.png",
+        "button": {
+            "title": "🦕 Play DinoRun Pro",
+            "action": {
+                "type": "link",
+                "url": "https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app"
+            }
+        }
+    }'>
+    
+    <!-- Backward compatibility with fc:frame -->
+    <meta property="fc:frame" content='{
+        "version": "1",
+        "imageUrl": "https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app/screenshot-portrait.png",
+        "button": {
+            "title": "🦕 Play DinoRun Pro",
+            "action": {
+                "type": "link",
+                "url": "https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app"
+            }
+        }
+    }'>
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Fredoka+One:wght@400&display=swap" rel="stylesheet">
@@ -495,6 +521,19 @@
                     const { token } = await sdk.quickAuth.getToken();
                     console.log('✅ Quick Auth successful, user authenticated');
                     window.userToken = token;
+                    
+                    // Try to fetch user data using authenticated request
+                    try {
+                        const userResponse = await sdk.quickAuth.fetch('/api/user');
+                        if (userResponse.ok) {
+                            const userData = await userResponse.json();
+                            console.log('👤 User data:', userData);
+                            window.userData = userData;
+                        }
+                    } catch (fetchError) {
+                        console.log('⚠️ User data fetch failed (expected for demo):', fetchError.message);
+                    }
+                    
                 } catch (authError) {
                     console.log('⚠️ Quick Auth failed, continuing without authentication:', authError.message);
                     // Continue without auth - app should still work
@@ -575,6 +614,20 @@
                 }
             }, 3000);
         });
+        
+        // Developer Mode Debug Info
+        function logDeveloperInfo() {
+            console.log('🔧 Developer Mode Info:');
+            console.log('📱 Enable Developer Mode: https://farcaster.xyz/~/settings/developer-tools');
+            console.log('🎮 Current URL:', window.location.href);
+            console.log('🔑 SDK Available:', !!window.farcasterSDK);
+            console.log('🎯 Game Instance:', !!window.gameInstance);
+            console.log('👤 User Token:', !!window.userToken);
+            console.log('📊 User Data:', !!window.userData);
+        }
+        
+        // Log developer info after initialization
+        setTimeout(logDeveloperInfo, 1000);
     </script>
     
     <script src="game.js"></script>
@@ -666,7 +719,7 @@
         // Enhanced share function using Farcaster SDK
         async function shareScore(score) {
             const shareText = `🦕 I just scored ${score} points in DinoRun Pro! 🎮 Can you beat my score? Play the ultimate Web3 gaming experience! 🚀 #DinoRunPro #Web3Gaming #NFTs`;
-            const shareUrl = 'https://dino-run-mini-2ntfbwds8-zerologs-projects.vercel.app';
+            const shareUrl = 'https://dino-run-mini-af80dhcwt-zerologs-projects.vercel.app';
             
             try {
                 // Try Farcaster SDK share first
