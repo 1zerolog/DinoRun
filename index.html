@@ -230,6 +230,21 @@
             margin-top: 10px !important;
         }
         
+        .controls-info {
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+        
+        .controls-info p {
+            margin: 0;
+            color: #667eea;
+            font-size: 0.9em;
+        }
+        
         .controls {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -485,33 +500,22 @@
         
         <!-- Game Canvas -->
         <div class="canvas-wrapper">
-            <canvas id="gameCanvas" width="900" height="400"></canvas>
+            <canvas id="gameCanvas" width="800" height="300"></canvas>
             <div id="gameStartMessage" class="game-start-message">
-                <h2>🦕 DinoRun Pro</h2>
-                <p>Get Ready! Game starts automatically...</p>
-                <p class="controls-hint">Press SPACE to jump • Hold SHIFT for nitro</p>
+                <h2>🦕 DinoRun</h2>
+                <p>Get Ready! Game starts in 2 seconds...</p>
+                <p class="controls-hint">Press SPACE or CLICK to jump</p>
             </div>
         </div>
         
-        <!-- Power-ups Display -->
-        <div class="power-ups">
-            <div class="power-up" id="nitroStatus">
-                🚀 Nitro: <span id="nitroLevel">Ready</span>
-            </div>
-            <div class="power-up" id="shieldStatus">
-                🛡️ Shield: <span id="shieldLevel">Off</span>
-            </div>
-            <div class="power-up" id="multiJumpStatus">
-                ⭐ Multi-Jump: <span id="multiJumpLevel">Off</span>
-            </div>
+        <!-- Simple Controls Info -->
+        <div class="controls-info">
+            <p>🎮 <strong>Controls:</strong> SPACE to jump • Click to jump • Avoid obstacles!</p>
         </div>
         
-        <!-- Controls -->
+        <!-- Simple Controls -->
         <div class="controls">
             <button class="btn primary" id="jumpBtn">🦘 Jump (Space)</button>
-            <button class="btn secondary" id="nitroBtn">🚀 Nitro (Shift)</button>
-            <button class="btn danger" id="restartBtn">🔄 Restart</button>
-            <button class="btn nft" id="mintNftBtn">🎨 Mint NFT</button>
             <button class="btn secondary" id="shareBtn">📤 Share Score</button>
         </div>
         
