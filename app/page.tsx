@@ -12,8 +12,8 @@ const GRID_WIDTH = 24
 const GRID_HEIGHT = 14
 const CELL = 20
 const INITIAL_SPEED = 100
-const GRAVITY = 0.6
-const JUMP_FORCE = -10
+const GRAVITY = 1.2
+const JUMP_FORCE = -8
 const NITRO_SPEED = 3
 const NITRO_DURATION = 100
 
@@ -164,8 +164,16 @@ function Game({ onShare, playerAddress }: { onShare: (score: number) => void; pl
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (!gameStarted || gameOver) return
       const key = e.key
+      
+      // Start game with space if not started or game over
+      if ((!gameStarted || gameOver) && key === " ") {
+        startGame()
+        return
+      }
+      
+      // Only handle game controls if game is started and not over
+      if (!gameStarted || gameOver) return
       
       // Jump with up arrow or space
       if ((key === " " || key === "ArrowUp" || key === "w") && !isJumping) {
@@ -211,11 +219,19 @@ function Game({ onShare, playerAddress }: { onShare: (score: number) => void; pl
     }
 
     const handleTouchEnd = (e: TouchEvent) => {
-      if (!gameStarted || gameOver) return
       const touchEndX = e.changedTouches[0].clientX
       const touchEndY = e.changedTouches[0].clientY
       const dx = touchEndX - touchStartX
       const dy = touchEndY - touchStartY
+
+      // Start game with tap if not started or game over
+      if ((!gameStarted || gameOver) && Math.abs(dx) < 20 && Math.abs(dy) < 20) {
+        startGame()
+        return
+      }
+      
+      // Only handle game controls if game is started and not over
+      if (!gameStarted || gameOver) return
 
       // Jump if swipe up or tap
       if ((dy < -30 || (Math.abs(dx) < 20 && Math.abs(dy) < 20)) && !isJumping) {
@@ -612,7 +628,7 @@ function Game({ onShare, playerAddress }: { onShare: (score: number) => void; pl
       {!gameStarted && !gameOver && (
         <div className="text-center p-6 bg-muted/50 backdrop-blur-md rounded-2xl">
           <p className="text-lg mb-2 text-foreground">Ready to play?</p>
-          <p className="text-sm text-muted-foreground">↑ Jump • → Nitro Boost • Swipe up/down for mobile</p>
+          <p className="text-sm text-muted-foreground">Press SPACE to start! • ↑ Jump • → Nitro Boost</p>
         </div>
       )}
 
@@ -621,6 +637,7 @@ function Game({ onShare, playerAddress }: { onShare: (score: number) => void; pl
           <h2 className="text-3xl font-black mb-3 text-foreground">Game Over!</h2>
           <p className="text-2xl text-primary mb-2">Score: {score}</p>
           {score === highScore && score > 0 && <p className="text-lg text-accent mb-4">🎉 New High Score!</p>}
+          <p className="text-sm text-muted-foreground mb-4">Press SPACE to play again!</p>
 
           {showNFTPrompt && !isMinting && !mintStatus && (
             <div className="mt-6 p-4 bg-card/80 rounded-xl border border-primary/30">
@@ -664,14 +681,6 @@ function Game({ onShare, playerAddress }: { onShare: (score: number) => void; pl
       )}
 
       <div className="flex gap-3 flex-wrap justify-center">
-        {!gameStarted || gameOver ? (
-          <button
-            onClick={startGame}
-            className="px-8 py-4 rounded-full bg-gradient-to-r from-primary to-accent text-primary-foreground text-lg font-bold transition-all duration-300 hover:scale-105 shadow-lg"
-          >
-            {gameOver ? "🔄 Play Again" : "▶️ Start Game"}
-          </button>
-        ) : null}
         <button
           onClick={() => onShare(score)}
           className="px-8 py-4 rounded-full bg-gradient-to-r from-accent to-primary text-accent-foreground text-lg font-bold transition-all duration-300 hover:scale-105 shadow-lg"
