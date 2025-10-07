@@ -8,12 +8,12 @@
   "theme_color": "#764ba2",
   "icons": [
     {
-      "src": "/snake-icon.png",
+      "src": "/dino-icon.svg",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/snake-icon.png",
+      "src": "/dino-icon.svg",
       "sizes": "512x512",
       "type": "image/png"
     }

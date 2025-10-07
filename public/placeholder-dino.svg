@@ -1,0 +1,44 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="dinoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#228B22;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#006400;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#98FB98;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="300" fill="url(#bgGradient)"/>
+  
+  <!-- Ground -->
+  <rect x="0" y="250" width="400" height="50" fill="#8B4513"/>
+  
+  <!-- Dino character -->
+  <rect x="150" y="200" width="100" height="60" fill="url(#dinoGradient)" rx="5"/>
+  <rect x="230" y="210" width="60" height="40" fill="url(#dinoGradient)" rx="3"/>
+  <rect x="275" y="215" width="30" height="30" fill="url(#dinoGradient)" rx="3"/>
+  
+  <!-- Dino eye -->
+  <circle cx="250" cy="220" r="8" fill="white"/>
+  <circle cx="250" cy="220" r="4" fill="black"/>
+  
+  <!-- Dino legs -->
+  <rect x="160" y="260" width="20" height="25" fill="url(#dinoGradient)"/>
+  <rect x="220" y="260" width="20" height="25" fill="url(#dinoGradient)"/>
+  
+  <!-- Dino spikes -->
+  <polygon points="180,180 190,160 200,180" fill="url(#dinoGradient)"/>
+  <polygon points="220,175 230,155 240,175" fill="url(#dinoGradient)"/>
+  <polygon points="260,170 270,150 280,170" fill="url(#dinoGradient)"/>
+  
+  <!-- Text -->
+  <text x="200" y="140" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white" text-anchor="middle">
+    Dino Game
+  </text>
+  <text x="200" y="170" font-family="Arial, sans-serif" font-size="14" fill="rgba(255,255,255,0.8)" text-anchor="middle">
+    Jump &amp; Survive!
+  </text>
+</svg>
